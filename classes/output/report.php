@@ -25,6 +25,7 @@
 namespace report_coursecoach\output;
 
 use report_coursecoach\check\result;
+use report_coursecoach\criteria_config;
 use report_coursecoach\readiness;
 use renderable;
 use renderer_base;
@@ -102,7 +103,17 @@ final class report implements renderable, templatable {
 
         $score = $this->readiness->get_score();
         $totalcount = count($this->readiness->get_results());
+        $definitions = criteria_config::get_definitions();
+        $disabledchecks = [];
+        foreach ($this->readiness->get_disabled_checks() as $id) {
+            $disabledchecks[] = ['title' => get_string($definitions[$id]['title'], 'report_coursecoach')];
+        }
+        $assessedstring = $disabledchecks ? 'assessedenabledchecks' : 'assessedchecks';
         return [
+            'hasdisabledchecks' => !empty($disabledchecks),
+            'alldisabled' => $totalcount === 0 && !empty($disabledchecks),
+            'disabledchecks' => $disabledchecks,
+            'disabledcount' => count($disabledchecks),
             'score' => $score,
             'readinesslabel' => $this->get_readiness_label(),
             'readinessclass' => $this->get_readiness_class(),
@@ -111,7 +122,7 @@ final class report implements renderable, templatable {
             'criticalcount' => $this->readiness->get_critical_count(),
             'assessedcount' => $assessedcount,
             'totalcount' => $totalcount,
-            'assessedchecks' => get_string('assessedchecks', 'report_coursecoach', (object) [
+            'assessedchecks' => get_string($assessedstring, 'report_coursecoach', (object) [
                 'assessed' => $assessedcount,
                 'total' => $totalcount,
             ]),

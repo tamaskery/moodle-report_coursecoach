@@ -20,9 +20,11 @@ A read-only course report that helps Moodle teachers and managers identify commo
 
 Course Readiness Coach helps editing teachers, course managers, administrators, and other authorised roles review whether a Moodle course is technically configured for learner use. From one course-level report, users can review course visibility and dates, completion configuration, required activity visibility, assessment configuration, learner feedback presence, incomplete sections, and selected activity-date conflicts.
 
-The report applies 10 deterministic checks and groups the results as passed, warnings, critical findings, or not applicable. Applicable checks contribute to a weighted readiness score, and findings link to relevant Moodle settings where appropriate. The score indicates configuration readiness only; it does not certify pedagogical quality, accessibility, security, or programme suitability.
+The report offers 10 deterministic checks, all enabled by default, and groups the results as passed, warnings, critical findings, or not applicable. Applicable checks contribute to a weighted readiness score, and findings link to relevant Moodle settings where appropriate. The score indicates configuration readiness only; it does not certify pedagogical quality, accessibility, security, or programme suitability.
 
 Course Readiness Coach is read-only. It does not change course settings, activities, grades, quizzes, or learner completion records. It stores no report results or personal data, sends no information outside Moodle, and does not use AI or external APIs.
+
+Administrators can enable or disable each check and configure the minimum activity completion coverage percentage. Defaults preserve the original results. Disabled checks are disclosed separately and excluded from scoring. Settings are site-wide, stored through Moodle configuration APIs, and do not change course configuration. Weights and outcome severity remain fixed.
 
 The current checks are:
 

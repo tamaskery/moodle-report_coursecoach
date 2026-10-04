@@ -25,7 +25,9 @@
 namespace report_coursecoach\check;
 
 use completion_info;
+use coding_exception;
 use moodle_url;
+use report_coursecoach\criteria_config;
 use stdClass;
 
 /**
@@ -34,6 +36,21 @@ use stdClass;
 final class activity_completion_coverage implements checker {
     /** @var int Score weight. */
     private const WEIGHT = 2;
+
+    /** @var int Minimum configured activity percentage. */
+    private int $minpercent;
+
+    /**
+     * Constructor.
+     *
+     * @param int $minpercent Minimum percentage from 1 to 100; defaults to the original rule.
+     */
+    public function __construct(int $minpercent = criteria_config::DEFAULT_MINPERCENT) {
+        if ($minpercent < 1 || $minpercent > 100) {
+            throw new coding_exception('Course Coach coverage must be between 1 and 100 percent.');
+        }
+        $this->minpercent = $minpercent;
+    }
 
     /**
      * Analyse activity completion configuration without changing it.
@@ -69,16 +86,22 @@ final class activity_completion_coverage implements checker {
             return $this->not_applicable($title, 'check:coverage:none');
         }
 
-        if ($unconfigured) {
+        $coverage = (object) [
+            'configured' => count($applicable) - count($unconfigured),
+            'total' => count($applicable),
+            'required' => $this->minpercent,
+            'activities' => $this->activity_names($unconfigured),
+        ];
+        if (100 * $coverage->configured < $this->minpercent * $coverage->total) {
             return new result(
                 true,
                 result::STATUS_WARNING,
                 result::SEVERITY_IMPORTANT,
                 $title,
-                get_string('check:coverage:warning:explanation', 'report_coursecoach', (object) [
+                $this->minpercent === 100 ? get_string('check:coverage:warning:explanation', 'report_coursecoach', (object) [
                     'count' => count($unconfigured),
-                    'activities' => $this->activity_names($unconfigured),
-                ]),
+                    'activities' => $coverage->activities,
+                ]) : get_string('check:coverage:threshold:warning', 'report_coursecoach', $coverage),
                 get_string('check:coverage:warning:recommendation', 'report_coursecoach'),
                 new moodle_url('/course/modedit.php', ['update' => $unconfigured[0]->id, 'return' => 0]),
                 get_string('action:activitycompletion', 'report_coursecoach')
@@ -90,7 +113,9 @@ final class activity_completion_coverage implements checker {
             result::STATUS_PASSED,
             result::SEVERITY_RECOMMENDATION,
             $title,
-            get_string('check:coverage:passed:explanation', 'report_coursecoach', count($applicable)),
+            $this->minpercent === 100
+                ? get_string('check:coverage:passed:explanation', 'report_coursecoach', count($applicable))
+                : get_string('check:coverage:threshold:passed', 'report_coursecoach', $coverage),
             get_string('check:coverage:passed:recommendation', 'report_coursecoach')
         );
     }

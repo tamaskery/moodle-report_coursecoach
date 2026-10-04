@@ -110,4 +110,13 @@ final class readiness_calculator_test extends advanced_testcase {
 
         return new result($applicable, $status, $severity, 'Title', 'Explanation', 'Recommendation');
     }
+    /**
+     * Test an empty input is not a successful readiness assessment.
+     */
+    public function test_empty_input_is_not_assessed(): void {
+        $readiness = (new readiness_calculator())->calculate([]);
+        $this->assertSame(readiness::LABEL_NOT_ASSESSED, $readiness->get_label());
+        $this->assertSame(0, $readiness->get_score());
+        $this->assertSame([], $readiness->get_disabled_checks());
+    }
 }

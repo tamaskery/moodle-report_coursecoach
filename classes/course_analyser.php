@@ -25,17 +25,8 @@
 namespace report_coursecoach;
 
 use coding_exception;
-use report_coursecoach\check\activity_date_alignment;
 use report_coursecoach\check\activity_completion_coverage;
 use report_coursecoach\check\checker;
-use report_coursecoach\check\course_completion;
-use report_coursecoach\check\course_dates;
-use report_coursecoach\check\course_visibility;
-use report_coursecoach\check\feedback_presence;
-use report_coursecoach\check\incomplete_content;
-use report_coursecoach\check\quiz_pass_completion;
-use report_coursecoach\check\quiz_question_randomisation;
-use report_coursecoach\check\required_completion_activity_accessibility;
 use stdClass;
 
 /**
@@ -45,24 +36,31 @@ final class course_analyser {
     /** @var checker[] Ordered checkers. */
     private array $checkers;
 
+    /** @var string[] Identifiers of checks excluded by site configuration. */
+    private array $disabledchecks = [];
+
     /**
      * Constructor.
      *
      * @param checker[]|null $checkers Optional checker list for reuse and testing.
+     * @param criteria_config|null $config Optional criteria for the built-in checkers; ignored for an explicit checker list.
      */
-    public function __construct(?array $checkers = null) {
-        $this->checkers = $checkers ?? [
-            new course_visibility(),
-            new course_dates(),
-            new course_completion(),
-            new activity_completion_coverage(),
-            new required_completion_activity_accessibility(),
-            new quiz_pass_completion(),
-            new quiz_question_randomisation(),
-            new feedback_presence(),
-            new incomplete_content(),
-            new activity_date_alignment(),
-        ];
+    public function __construct(?array $checkers = null, ?criteria_config $config = null) {
+        if ($checkers === null) {
+            $config = $config ?? new criteria_config();
+            $checkers = [];
+            foreach (criteria_config::get_definitions() as $id => $definition) {
+                if (!$config->is_enabled($id)) {
+                    $this->disabledchecks[] = $id;
+                    continue;
+                }
+                $classname = $definition['class'];
+                $checkers[] = $id === 'activity_completion_coverage'
+                    ? new activity_completion_coverage($config->get_activity_completion_minpercent())
+                    : new $classname();
+            }
+        }
+        $this->checkers = $checkers;
 
         foreach ($this->checkers as $checker) {
             if (!$checker instanceof checker) {
@@ -83,6 +81,6 @@ final class course_analyser {
             $results[] = new weighted_result($checker->check($course), $checker->get_weight());
         }
 
-        return (new readiness_calculator())->calculate($results);
+        return (new readiness_calculator())->calculate($results, $this->disabledchecks);
     }
 }

@@ -89,4 +89,15 @@ final class course_completion_test extends advanced_testcase {
 
         $this->assertSame(result::STATUS_PASSED, $result->get_status());
     }
+    /**
+     * Test site-disabled completion remains Critical without a course settings action.
+     */
+    public function test_site_completion_disabled_is_critical(): void {
+        $this->resetAfterTest();
+        set_config('enablecompletion', 0);
+        $course = $this->getDataGenerator()->create_course();
+        $result = (new course_completion())->check($course);
+        $this->assertSame(result::STATUS_CRITICAL, $result->get_status());
+        $this->assertNull($result->get_settings_url());
+    }
 }

@@ -86,4 +86,30 @@ class behat_report_coursecoach extends behat_base {
         $courseurl = new moodle_url('/course/view.php', ['id' => $course->id]);
         $this->getSession()->visit($this->locate_path($courseurl->out_as_local_url(false)));
     }
+    /**
+     * Verify course staff cannot access the native criteria settings page.
+     *
+     * @When /^direct Course Readiness Coach settings access is denied$/
+     */
+    public function direct_settings_access_is_denied(): void {
+        global $CFG;
+        $url = new moodle_url('/' . $CFG->admin . '/settings.php', ['section' => 'reportcoursecoach']);
+        $this->getSession()->visit($this->locate_path($url->out_as_local_url(false)));
+        $error = $this->getSession()->getPage()->find('css', '[data-rel="fatalerror"]');
+        if (!$error || !$error->find('css', '.errorcode a[href$="/accessdenied"]')) {
+            throw new \Behat\Mink\Exception\ExpectationException(
+                'Course staff were not denied access to criteria settings.',
+                $this->getSession()
+            );
+        }
+        $this->getSession()->visit($this->locate_path('/'));
+    }
+    /**
+     * Exercise Moodle's native settings save with an invalid CSRF token.
+     *
+     * @When /^I invalidate the Course Readiness Coach settings sesskey$/
+     */
+    public function invalidate_settings_sesskey(): void {
+        $this->getSession()->executeScript("document.querySelector('#adminsettings input[name=sesskey]').value = 'invalid';");
+    }
 }

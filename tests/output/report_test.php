@@ -169,6 +169,48 @@ final class report_test extends advanced_testcase {
     }
 
     /**
+     * Test disabled checks remain separate from applicability and score counts.
+     */
+    public function test_disabled_checks_are_disclosed_separately(): void {
+        $results = [
+            new weighted_result($this->make_result('Passed', result::STATUS_PASSED), 1),
+            new weighted_result($this->make_result('Not applicable', result::STATUS_NOT_APPLICABLE), 1),
+        ];
+        $readiness = (new readiness_calculator())->calculate($results, ['course_visibility']);
+        $data = (new report($readiness))->export_for_template($this->createStub(renderer_base::class));
+        $this->assertSame(100, $data['score']);
+        $this->assertSame(1, $data['assessedcount']);
+        $this->assertSame(2, $data['totalcount']);
+        $this->assertSame(1, $data['disabledcount']);
+        $this->assertSame('1 of 2 enabled checks assessed', $data['assessedchecks']);
+        $this->assertSame([['title' => 'Course visibility']], $data['disabledchecks']);
+        $this->assertTrue($data['hasdisabledchecks']);
+        $this->assertFalse($data['alldisabled']);
+        $this->assertCount(1, $data['notapplicablechecks']);
+        $this->assertCount(1, $data['passedchecks']);
+    }
+
+    /**
+     * Test the all-disabled report does not imply successful evaluation.
+     */
+    public function test_all_disabled_report_is_not_assessed(): void {
+        global $PAGE;
+        $this->resetAfterTest();
+        $PAGE->set_url(new moodle_url('/'));
+        $renderer = $PAGE->get_renderer('core');
+        $ids = array_keys(\report_coursecoach\criteria_config::get_definitions());
+        $readiness = (new readiness_calculator())->calculate([], $ids);
+        $data = (new report($readiness))->export_for_template($renderer);
+        $this->assertSame('Not assessed', $data['readinesslabel']);
+        $this->assertTrue($data['alldisabled']);
+        $this->assertFalse($data['hasnotapplicablechecks']);
+        $this->assertFalse($data['haspassedchecks']);
+        $html = $renderer->render_from_template('report_coursecoach/report', $data);
+        $this->assertStringContainsString('Disabled by site configuration', $html);
+        $this->assertStringContainsString('This course has not been assessed.', $html);
+        $this->assertStringContainsString('0 of 0 enabled checks assessed', $html);
+    }
+    /**
      * Export template data for supplied results.
      *
      * @param result[] $results Check results in analyser order.
