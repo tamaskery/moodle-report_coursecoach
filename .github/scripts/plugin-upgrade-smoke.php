@@ -38,7 +38,7 @@ if ($phase === 'prepare') {
     $fixtures = [
         ['visible' => 1, 'enablecompletion' => 1, 'startdate' => 2000000000, 'enddate' => 2100000000],
         ['visible' => 0, 'enablecompletion' => 0, 'startdate' => 0, 'enddate' => 0],
-        ['visible' => 1, 'enablecompletion' => 1, 'startdate' => 2100000000, 'enddate' => 2000000000],
+        ['visible' => 1, 'enablecompletion' => 1, 'startdate' => 2100000000, 'enddate' => 2200000000],
     ];
     foreach ($fixtures as $index => $fixture) {
         create_course((object) ($fixture + [
@@ -48,6 +48,8 @@ if ($phase === 'prepare') {
             'newsitems' => 0,
         ]));
     }
+    // Simulate inconsistent imported dates after core has validated course creation.
+    $DB->set_field('course', 'enddate', 2000000000, ['shortname' => 'coursecoach-policy-2']);
 }
 $snapshot = [];
 for ($index = 0; $index < 3; $index++) {
