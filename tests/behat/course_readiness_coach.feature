@@ -24,8 +24,7 @@ Feature: Access and render the Course Readiness Coach report
   Scenario: An editing teacher opens Course Readiness Coach from course navigation
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage
-    When I click on "More" "link" in the ".secondary-navigation .moremenu.navigation" "css_element"
-    And I click on "Reports" "link" in the ".secondary-navigation .moremenu.navigation" "css_element"
+    When I navigate to "Reports" in current page administration
     And I click on "Course Readiness Coach" "link"
     Then I should see "Course Readiness Coach" in the "h1" "css_element"
     And I should see "Readiness score"
@@ -33,8 +32,7 @@ Feature: Access and render the Course Readiness Coach report
   Scenario: A manager opens Course Readiness Coach for a course
     Given I log in as "manager1"
     And I am on "Course 1" course homepage
-    When I click on "More" "link" in the ".secondary-navigation .moremenu.navigation" "css_element"
-    And I click on "Reports" "link" in the ".secondary-navigation .moremenu.navigation" "css_element"
+    When I navigate to "Reports" in current page administration
     And I click on "Course Readiness Coach" "link"
     Then I should see "Course Readiness Coach" in the "h1" "css_element"
     And I should see "Readiness score"
@@ -42,15 +40,14 @@ Feature: Access and render the Course Readiness Coach report
   Scenario: A student cannot see or directly access Course Readiness Coach
     Given I log in as "student1"
     And I am on "Course 1" course homepage
-    Then "Reports" "link" should not exist in the ".secondary-navigation .moremenu.navigation" "css_element"
+    Then "Reports" "link" should not exist in the ".secondary-navigation" "css_element"
     And "Course Readiness Coach" "link" should not exist
     When direct Course Readiness Coach access for course "C1" is denied
 
   Scenario: The report renders a deterministic readiness result without debugging errors
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage
-    When I click on "More" "link" in the ".secondary-navigation .moremenu.navigation" "css_element"
-    And I click on "Reports" "link" in the ".secondary-navigation .moremenu.navigation" "css_element"
+    When I navigate to "Reports" in current page administration
     And I click on "Course Readiness Coach" "link"
     Then I should see "Readiness score"
     And I should see "Summary"

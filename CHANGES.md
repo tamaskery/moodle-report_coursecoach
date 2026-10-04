@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Prepared Moodle 5.3 validation with PHP 8.3/MariaDB and PHP 8.4/PostgreSQL CI jobs and manual workflow dispatch.
+- Extended Behat smoke-test CI to Moodle 4.5, 5.2, and 5.3 and replaced legacy navigation markup selectors with Moodle's navigation helper.
+- Added the Moodle 5.3 API review and release checklist; declared support remains Moodle 4.5 through 5.2 pending validation.
+
 ## 1.0.0
 
 - Prepared the first stable release of the read-only, 10-check course-readiness report.

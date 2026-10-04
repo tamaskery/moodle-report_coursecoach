@@ -1,6 +1,7 @@
 name: Moodle Plugin CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -71,6 +72,20 @@ jobs:
             db-port: 5432
             db-user: moodle
             db-pass: moodle
+          - moodle-branch: MOODLE_503_STABLE
+            php-version: '8.3'
+            database: mariadb
+            db-host: 127.0.0.1
+            db-port: 3306
+            db-user: root
+            db-pass: ''
+          - moodle-branch: MOODLE_503_STABLE
+            php-version: '8.4'
+            database: pgsql
+            db-host: 127.0.0.1
+            db-port: 5432
+            db-user: moodle
+            db-pass: moodle
     steps:
       - uses: actions/checkout@v6
         with:
@@ -119,8 +134,18 @@ jobs:
         run: moodle-plugin-ci phpunit
 
   behat:
-    name: Behat smoke tests / Moodle 5.2 / MariaDB
+    name: Behat smoke tests / ${{ matrix.moodle-branch }} / MariaDB
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - moodle-branch: MOODLE_405_STABLE
+            php-version: '8.2'
+          - moodle-branch: MOODLE_502_STABLE
+            php-version: '8.3'
+          - moodle-branch: MOODLE_503_STABLE
+            php-version: '8.3'
     services:
       mariadb:
         image: mariadb:11
@@ -141,7 +166,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: ${{ matrix.php-version }}
           extensions: mysqli
           ini-values: max_input_vars=5000
           coverage: none
@@ -160,7 +185,7 @@ jobs:
           DB: mariadb
           DB_USER: root
           DB_PASS: ''
-          MOODLE_BRANCH: MOODLE_502_STABLE
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
       - name: Run Course Readiness Coach Behat smoke tests
         run: >-
           moodle-plugin-ci behat --profile chrome

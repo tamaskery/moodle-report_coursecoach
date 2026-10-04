@@ -85,6 +85,8 @@ vendor/bin/phpcs --standard=moodle report/coursecoach
 
 Automated CI covers Moodle 4.5, 5.0, 5.1, and 5.2 with MariaDB, plus Moodle 5.2 with PostgreSQL. The repository also contains focused PHPUnit and Behat coverage.
 
+Moodle 5.3 preparation adds CI jobs on `MOODLE_503_STABLE` with PHP 8.3/MariaDB and PHP 8.4/PostgreSQL, plus Behat smoke tests on Moodle 4.5, 5.2, and 5.3. These jobs are configured; their results must be verified before claiming Moodle 5.3 support. See the [Moodle 5.3 upgrade checklist](docs/moodle-5.3.md) for the API review, validation requirements, and release steps. The declared support range remains Moodle 4.5 through 5.2 during preparation.
+
 ## Support and licence
 
 - Source: [GitHub repository](https://github.com/tamaskery/moodle-report_coursecoach)
