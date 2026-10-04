@@ -42,7 +42,7 @@ final class criteria_config_test extends advanced_testcase {
         $config = new criteria_config([]);
         $this->assertSame([
             'course_visibility', 'course_dates', 'course_completion', 'activity_completion_coverage',
-            'required_completion_activity_accessibility', 'quiz_pass_completion', 'quiz_question_randomisation',
+            'required_activity_visibility', 'quiz_pass_completion', 'quiz_question_randomisation',
             'feedback_presence', 'incomplete_content', 'activity_date_alignment',
         ], array_keys(criteria_config::get_definitions()));
         foreach (criteria_config::get_definitions() as $id => $definition) {

@@ -45,7 +45,7 @@ final class criteria_config {
             'class' => check\activity_completion_coverage::class,
             'title' => 'check:coverage:title',
         ],
-        'required_completion_activity_accessibility' => [
+        'required_activity_visibility' => [
             'class' => check\required_completion_activity_accessibility::class,
             'title' => 'check:requiredactivity:title',
         ],
