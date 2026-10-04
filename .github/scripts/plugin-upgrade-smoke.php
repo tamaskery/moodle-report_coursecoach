@@ -71,8 +71,11 @@ for ($index = 0; $index < 3; $index++) {
             'weight' => $weighted->get_weight(),
         ];
     }
+    // Core upgrade cache purges increment cacherev; it is not a course setting.
+    $courseconfig = clone $course;
+    unset($courseconfig->cacherev);
     $snapshot[] = [
-        'course' => $course,
+        'course' => $courseconfig,
         'results' => $results,
         'score' => $readiness->get_score(),
         'label' => $readiness->get_label(),
@@ -90,6 +93,17 @@ $json = json_encode($snapshot, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
 if ($phase === 'prepare') {
     file_put_contents($path, $json);
 } else if (file_get_contents($path) !== $json) {
+    $previous = json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
+    $current = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+    foreach ($current as $index => $fields) {
+        foreach ($fields as $key => $value) {
+            if ($previous[$index][$key] !== $value) {
+                cli_writeln('Course ' . $index . ', ' . $key . ' differs:');
+                cli_writeln('Before: ' . json_encode($previous[$index][$key], JSON_THROW_ON_ERROR));
+                cli_writeln('After: ' . json_encode($value, JSON_THROW_ON_ERROR));
+            }
+        }
+    }
     cli_error('Default criteria changed the audited plugin results.');
 }
 cli_writeln('PASS: plugin ' . $phase . ' preserved results and read-only behaviour.');
