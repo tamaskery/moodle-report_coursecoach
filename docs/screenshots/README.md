@@ -10,7 +10,6 @@ These six original PNGs show Course Readiness Coach 1.1.0 on a synthetic Moodle 
 | [02-configured-report.png](02-configured-report.png) | Apply your site's criteria: this example uses a 50% completion target and clearly discloses the disabled feedback check. |
 | [03-readiness-criteria.png](03-readiness-criteria.png) | Choose which checks apply across your Moodle site and set the activity completion coverage target. |
 | [04-dark-mode.png](04-dark-mode.png) | Review the same findings in Moodle Boost dark mode. |
-
 | [05-category-criteria.png](05-category-criteria.png) | Give a category its own policy, with inheritance for subcategories. |
 | [06-category-report.png](06-category-report.png) | See which category policy applies and which checks it excludes. |
 
