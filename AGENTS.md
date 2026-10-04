@@ -2,7 +2,7 @@
 
 ## Scope and Sources of Truth
 
-This repository contains the Moodle report plugin `report_coursecoach`, targeting Moodle 4.5 through 5.2. Follow the [official Moodle developer documentation](https://moodledev.io/) and Moodle core implementation; treat both as authoritative. When implementing unfamiliar Moodle functionality, inspect the relevant core code before designing an alternative. Check every change across the supported version range, avoid deprecated APIs when supported replacements exist, and follow Moodle coding standards and Frankenstyle naming throughout.
+This repository contains the Moodle report plugin `report_coursecoach`, targeting Moodle 4.5 through 5.3. Follow the [official Moodle developer documentation](https://moodledev.io/) and Moodle core implementation; treat both as authoritative. When implementing unfamiliar Moodle functionality, inspect the relevant core code before designing an alternative. Check every change across the supported version range, avoid deprecated APIs when supported replacements exist, and follow Moodle coding standards and Frankenstyle naming throughout.
 
 The product goal is: "Before opening a Moodle course to learners, Course Readiness Coach tells the teacher whether the course is technically ready and explains what should be fixed." The initial MVP is strictly read-only: it must never modify course configuration. Do not expand functionality beyond the requested scope.
 
@@ -54,4 +54,4 @@ Add PHPUnit coverage for checker logic, including applicable, non-applicable, pa
 - `vendor/bin/phpunit report/coursecoach/tests`
 - `vendor/bin/phpcs --standard=moodle report/coursecoach`
 
-Before declaring work complete, review Moodle coding standards, capabilities and security, Moodle 4.5-5.2 compatibility, deprecated API usage, language strings, accessibility, and Marketplace requirements. Run available tests plus Moodle code-quality/static-analysis tools, and report any checks that could not be run. Keep commits focused; pull requests must describe scope, verification, compatibility impact, and screenshots for visible UI changes.
+Before declaring work complete, review Moodle coding standards, capabilities and security, Moodle 4.5-5.3 compatibility, deprecated API usage, language strings, accessibility, and Marketplace requirements. Run available tests plus Moodle code-quality/static-analysis tools, and report any checks that could not be run. Keep commits focused; pull requests must describe scope, verification, compatibility impact, and screenshots for visible UI changes.

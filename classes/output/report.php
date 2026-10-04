@@ -139,7 +139,7 @@ final class report implements renderable, templatable {
             case result::STATUS_CRITICAL:
                 return 'bg-danger';
             default:
-                return 'bg-secondary';
+                return 'bg-secondary text-dark';
         }
     }
 
@@ -175,7 +175,7 @@ final class report implements renderable, templatable {
             case readiness::LABEL_NOT_READY:
                 return 'bg-danger';
             default:
-                return 'bg-secondary';
+                return 'bg-secondary text-dark';
         }
     }
 }

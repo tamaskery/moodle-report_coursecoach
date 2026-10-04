@@ -45,7 +45,7 @@ The current checks are:
 - Moodle settings links for applicable findings.
 - Course-context capability control for authorised roles.
 - Read-only operation with no plugin database tables.
-- Moodle 4.5 through 5.2 support.
+- Moodle 4.5 through 5.3 support.
 
 ## Privacy statement
 
@@ -57,7 +57,7 @@ Extract the package's `coursecoach` directory to `report/coursecoach`, then visi
 
 ## Supported Moodle versions
 
-Moodle 4.5 through Moodle 5.2.
+Moodle 4.5 through Moodle 5.3.
 
 ## Support and source
 
@@ -76,6 +76,6 @@ Moodle 4.5 through Moodle 5.2.
 - Storage: no plugin database tables, personal data, or persisted report results
 - External processing: no external data transfer, API calls, or AI use
 - Implementation: standard Moodle capabilities, course context, APIs, Output API, and Mustache templates
-- Automated compatibility CI: Moodle 4.5, 5.0, 5.1, and 5.2
-- Databases tested: MariaDB and PostgreSQL
+- Automated compatibility CI: Moodle 4.5, 5.0, 5.1, 5.2, and 5.3
+- Databases tested: MariaDB and PostgreSQL 17
 - Automated tests: focused PHPUnit suite and Behat access/rendering smoke tests

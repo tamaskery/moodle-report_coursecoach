@@ -1,10 +1,13 @@
 # Changelog
 
-## Unreleased
+## 1.0.1
 
-- Prepared Moodle 5.3 validation with PHP 8.3/MariaDB and PHP 8.4/PostgreSQL CI jobs and manual workflow dispatch.
-- Extended Behat smoke-test CI to Moodle 4.5, 5.2, and 5.3 and replaced legacy navigation markup selectors with Moodle's navigation helper.
-- Added the Moodle 5.3 API review and release checklist; declared support remains Moodle 4.5 through 5.2 pending validation.
+- Added Moodle 5.3 support while retaining Moodle 4.5 through 5.2 compatibility.
+- Updated CI to use PostgreSQL 17, as required by the current Moodle 5.3 core environment checks, with PHP 8.3/MariaDB and PHP 8.4/PostgreSQL validation.
+- Added a Moodle 5.2-to-5.3 site-upgrade smoke test, repeated-analysis checks that preserve configuration and learner records, and coverage for Moodle 5.3 quiz due dates.
+- Added Boost light/dark screenshots, progress-bar accessibility markup checks, and keyboard settings-link tests. Corrected low-contrast Not applicable and Not assessed badges with an explicit dark foreground.
+- Modernised PHPUnit coverage attributes while preserving metadata for older supported Moodle tooling; removed an unnecessary guard from the callback-only lib.php.
+- Recorded compatibility evidence and the final-release recheck in the Moodle 5.3 checklist.
 
 ## 1.0.0
 

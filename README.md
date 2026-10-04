@@ -4,7 +4,7 @@
 
 Course Readiness Coach is a read-only, course-level report for Moodle. It helps editing teachers, course managers, administrators, and other authorised users identify common course-configuration issues before learners use a course. Its deterministic checks support course preparation; they do not certify pedagogical quality, accessibility, security, or an error-free course.
 
-The plugin type is **Report**, its component is `report_coursecoach`, and version **1.0.0** supports Moodle 4.5 through 5.2.
+The plugin type is **Report**, its component is `report_coursecoach`, and version **1.0.1** supports Moodle 4.5 through 5.3.
 
 ## Installation
 
@@ -83,9 +83,9 @@ vendor/bin/phpunit report/coursecoach/tests
 vendor/bin/phpcs --standard=moodle report/coursecoach
 ```
 
-Automated CI covers Moodle 4.5, 5.0, 5.1, and 5.2 with MariaDB, plus Moodle 5.2 with PostgreSQL. The repository also contains focused PHPUnit and Behat coverage.
+Automated CI covers Moodle 4.5, 5.0, 5.1, 5.2, and 5.3 with MariaDB, plus Moodle 5.2 and 5.3 with PostgreSQL 17. Moodle 5.3 is tested with PHP 8.3/MariaDB and PHP 8.4/PostgreSQL. Browser smoke tests cover Moodle 4.5, 5.2, and 5.3; the 5.3 tests also cover Boost light/dark modes, keyboard settings-link access, and synthetic screenshots. CI exercises an actual Moodle 5.2-to-5.3 site upgrade and checks that all ten report checks still run without changing course configuration.
 
-Moodle 5.3 preparation adds CI jobs on `MOODLE_503_STABLE` with PHP 8.3/MariaDB and PHP 8.4/PostgreSQL, plus Behat smoke tests on Moodle 4.5, 5.2, and 5.3. These jobs are configured; their results must be verified before claiming Moodle 5.3 support. See the [Moodle 5.3 upgrade checklist](docs/moodle-5.3.md) for the API review, validation requirements, and release steps. The declared support range remains Moodle 4.5 through 5.2 during preparation.
+Moodle 5.3 validation used the current `MOODLE_503_STABLE` branch on 4 October 2026, ahead of the scheduled final release. See the [compatibility evidence and release checklist](docs/moodle-5.3.md) for validation scope and the final-release recheck. The report retains its ten read-only checks.
 
 ## Support and licence
 

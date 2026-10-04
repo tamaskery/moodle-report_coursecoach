@@ -1,47 +1,39 @@
-# Moodle 5.3 upgrade preparation
+# Moodle 5.3 compatibility
 
-Prepared on 3 October 2026. Moodle's [release notes](https://moodledev.io/general/releases/5.3) still describe 5.3 as unreleased, with a target release date of 5 October 2026. Preparation does not certify compatibility: `version.php` continues to declare Moodle 4.5 through 5.2, and the plugin remains version 1.0.0.
+Plugin 1.0.1 declares support for Moodle 4.5 through 5.3. Validation on 4 October 2026 used the current `MOODLE_503_STABLE` branch at [`42622298fe06f9626d988d60b2bf589bd8f850e8`](https://github.com/moodle/moodle/tree/42622298fe06f9626d988d60b2bf589bd8f850e8). Moodle's [published release notes](https://moodledev.io/general/releases/5.3) still describe 5.3 as unreleased, with a target release date of 5 October 2026. Recheck the final core release before tagging or publishing the plugin release.
 
-## Core review
+## Core review and changes
 
-The review used the official `MOODLE_503_STABLE` branch at commit [`42622298fe06f9626d988d60b2bf589bd8f850e8`](https://github.com/moodle/moodle/tree/42622298fe06f9626d988d60b2bf589bd8f850e8). Recheck against the final release before publishing support.
-
-| Area | Finding and preparation |
+| Area | Finding and compatibility work |
 | --- | --- |
-| Server requirements | The current core `admin/environment.xml` requires MariaDB 11.4 or newer and PostgreSQL 17 or newer for 5.3; the published release notes still list older database minima. CI uses PHP 8.3/MariaDB 11 and PHP 8.4/PostgreSQL 17. The plugin's minimum Moodle version stays at 4.5. |
-| Completion | The inspected `completion_info` methods `is_enabled_for_site()`, `is_enabled()`, `has_criteria()`, and `get_criteria()` remain available. Existing checker tests must pass on 5.3 without developer debugging notices. |
-| Quiz structure | The inspected `quiz_settings::get_structure()`, `structure::get_slots()`, `get_question_type_for_slot()`, and `add_random_questions()` remain available. The new quiz due date does not require expanding this report's existing open/close date check. |
-| Navigation | Core navigation markup changed in 5.3. Browser tests now use `I navigate to "Reports" in current page administration`, which exists in both 4.5 and 5.3 core, instead of selecting `.moremenu.navigation`. Student checks use the enclosing `.secondary-navigation` container and retain direct-access denial coverage. |
-| Presentation | Core's upgrade notes introduce experimental Boost dark mode. The report uses native cards, lists, badges, and text utilities, with no custom stylesheet or navigation DOM manipulation. Verify readable status colours, text, and settings links in both modes before release. |
-| Security and privacy | Preparation makes no runtime changes. Course-context capability checks, normal Mustache escaping, the null privacy provider, and the ten read-only checks remain in place. |
+| Server requirements | Core's `admin/environment.xml` requires MariaDB 11.4 or newer and PostgreSQL 17 or newer for 5.3; the published release notes still list older database minima. CI uses MariaDB 11 and PostgreSQL 17, with PHP 8.3 and 8.4 respectively for 5.3. The plugin retains its Moodle 4.5 minimum. |
+| Completion | The inspected `completion_info` methods remain available. An integration test runs all ten checks twice and verifies that course/activity configuration, grades, attempts, completion criteria, and existing learner completion records remain unchanged. |
+| Quiz structure and dates | The quiz structure methods used by the randomisation checker remain available. A 5.3-specific schema-aware regression test verifies that the new due date does not replace the existing open/close boundary check or cause configuration changes. Older Moodle versions skip that one test. |
+| Navigation | Moodle 5.3 replaces the legacy navigation markup. Tests use Moodle's navigation helper, retain course-context teacher/manager access and student denial checks, and run on 4.5, 5.2, and 5.3. |
+| Presentation | 5.3-only browser scenarios exercise Boost light/dark modes, progress-bar accessibility attributes, and keyboard activation of the course settings link. Full-page synthetic screenshots are saved as workflow artifacts. Review found pale-grey Not applicable badges with white text; an explicit dark foreground now pairs with that background, also for the Not assessed badge. The native card/list layout and heading hierarchy remain intact. |
+| PHPUnit and coding standards | Coverage attributes are used by newer PHPUnit versions, with legacy declarations retained for older supported tooling. An unnecessary `MOODLE_INTERNAL` guard was removed from the callback-only `lib.php`; no protected request handler or capability enforcement was removed. |
+| Security and privacy | The report remains read-only with exactly ten independent checks. Course-context capability enforcement, normal Mustache escaping, the null privacy provider, and the absence of plugin tables or external processing remain unchanged. |
 
-Sources: [core upgrade notes](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/lib/UPGRADING.md), [course upgrade notes](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/course/UPGRADING.md), [quiz upgrade notes](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/mod/quiz/UPGRADING.md), [completion implementation](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/lib/completionlib.php), [quiz structure](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/mod/quiz/classes/structure.php), and [Behat navigation helper](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/lib/tests/behat/behat_navigation.php).
+Authoritative sources: [environment checks](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/admin/environment.xml), [core upgrade notes](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/lib/UPGRADING.md), [course upgrade notes](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/course/UPGRADING.md), [quiz upgrade notes](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/mod/quiz/UPGRADING.md), [completion implementation](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/lib/completionlib.php), [quiz structure](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/mod/quiz/classes/structure.php), and [Behat navigation helper](https://github.com/moodle/moodle/blob/42622298fe06f9626d988d60b2bf589bd8f850e8/public/lib/tests/behat/behat_navigation.php).
 
-## Validation before declaring support
+## Validation evidence
 
-- [ ] Run the updated GitHub Actions workflow on the final candidate commit. Require all existing Moodle 4.5–5.2 jobs and both new 5.3 quality jobs to pass. The workflow can also be started manually.
-- [ ] Require the Moodle 4.5, 5.2, and 5.3 Behat jobs to pass, including teacher and manager navigation, student navigation exclusion and direct-access denial, and report rendering without debugging errors.
-- [ ] Verify PHP lint, Moodle coding standards, PHPDoc, plugin metadata, savepoints, Mustache lint, PHP Mess Detector, PHPUnit, and package-layout validation. Do not treat configured CI jobs as completed verification.
-- [ ] Install plugin 1.0.0 on a Moodle 5.2 test site, then upgrade that site to the final Moodle 5.3 release. Confirm report access and all ten checks, and confirm that report use leaves course, activity, quiz, grade, and completion configuration unchanged.
-- [ ] Check Boost light and experimental dark modes, keyboard navigation, readable status labels, heading hierarchy, score announcements, and settings links. Capture synthetic screenshots for the release review.
-- [ ] Recheck core upgrade notes, deprecated APIs, privacy, capabilities, language strings, accessibility, and Marketplace requirements against the final 5.3 release.
+The [full compatibility run](https://github.com/tamaskery/moodle-report_coursecoach/actions/runs/37196056018) passed all eleven jobs before the final support metadata and badge-colour update. Subsequent pushes rerun the same suite; check the [latest workflow results](https://github.com/tamaskery/moodle-report_coursecoach/actions/workflows/moodle-plugin-ci.yml) for the release candidate commit.
 
-For an existing Moodle test checkout, run from its root:
+- Seven quality jobs cover Moodle 4.5 through 5.3 with MariaDB and Moodle 5.2/5.3 with PostgreSQL 17.
+- Checks include PHP lint, Moodle coding standards, PHPDoc, plugin metadata, savepoints, Mustache lint, PHP Mess Detector, and PHPUnit. PHP Mess Detector reports existing, non-blocking complexity/class-size findings; these are not a claim of zero static-analysis findings.
+- Three Behat jobs cover navigation, capability denial and report rendering on 4.5, 5.2 and 5.3. The 5.3 job includes light/dark, keyboard and progress-bar scenarios and stores screenshots.
+- The 5.3 MariaDB job installs a disposable Moodle 5.2 site, creates a synthetic course, runs the report, upgrades the same site/database to 5.3, and reruns all ten checks. Course configuration is compared before and after each analysis. PHPUnit separately verifies activity and learner-record preservation on every supported branch.
+- Package validation verifies the installable `coursecoach` layout and excludes development files and the CI-only upgrade helper.
+- Full-page light/dark screenshots were visually reviewed. This focused review and keyboard/markup coverage do not constitute a full accessibility certification.
 
-```text
-vendor/bin/phpunit report/coursecoach/tests
-vendor/bin/phpcs --standard=moodle report/coursecoach
-```
+The host has no usable local PHP/Moodle test environment, so runtime verification uses GitHub Actions. `git diff --check` is also run locally.
 
-Moodle 5.1 and later place plugin code under `public/report/coursecoach`; use the checkout's PHPUnit configuration and public plugin path where required. The repository's Moodle Plugin CI workflow manages these layout differences.
+## Final-release checklist
 
-## Release after validation
+1. Recheck the final Moodle 5.3 revision and upgrade notes against the audited core revision. Rerun CI if core changes affect the APIs or requirements above.
+2. Require all eleven jobs on the plugin release candidate to pass and review its light/dark screenshot artifacts.
+3. Confirm README, Marketplace copy, security policy, repository guidance and changelog agree with `version.php`: Moodle 4.5 through 5.3, plugin 1.0.1, and the unchanged Moodle 4.5 minimum.
+4. Build and validate the installable `coursecoach` package before tagging or publishing. No plugin database upgrade step is needed because this change introduces no tables or schema changes.
 
-1. Record the final core revision, CI run, database/PHP combinations, upgrade smoke-test outcome, and screenshots.
-2. Change `$plugin->supported` from `[405, 502]` to `[405, 503]`. Keep `$plugin->requires = 2024100700` so Moodle 4.5 remains supported.
-3. Increase `$plugin->version` using the actual release date and choose the next plugin release number. No database upgrade step is needed solely for a support-range change because the plugin has no tables.
-4. Update README, Marketplace copy, security policy, repository guidance, and changelog consistently to include verified Moodle 5.3 support. Build and validate the installable `coursecoach` package and publish only after the checks above pass.
-
-## Verification status at preparation
-
-The official 5.3 branch and relevant core API definitions were inspected. The workflow YAML parsed successfully, its seven quality and three Behat matrix entries were checked, the four access/rendering scenarios were retained, and `git diff --check` passed. PHP, Composer, and a Moodle test checkout were not found in the inspected host/WSL environment; Docker access was unavailable to the WSL user. PHPUnit, Behat, Moodle code-quality tools, rendered UI checks, and CI results remain pending.
+For local development, use the checkout's PHPUnit configuration and actual plugin path. On Moodle 4.5/5.0 the plugin path is `report/coursecoach`; on 5.1 and later it is `public/report/coursecoach`. Moodle's site installation and upgrade CLI scripts remain under root `admin/cli`.
