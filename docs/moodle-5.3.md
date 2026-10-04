@@ -29,11 +29,15 @@ The [full compatibility run](https://github.com/tamaskery/moodle-report_courseco
 
 The host has no usable local PHP/Moodle test environment, so runtime verification uses GitHub Actions. `git diff --check` is also run locally.
 
+## Configurable criteria in 1.1.0
+
+Version 1.1.0 retains Moodle 4.5–5.3 support and adds only native report settings, validated criteria selection, a coverage threshold, and disabled-check disclosure. The 1.0.1 evidence above is historical; the configurable release must pass the same CI matrix plus the new plugin-upgrade parity and settings scenarios. The upgrade fixture starts from plugin commit `8a7eec02ce932e34b37011599f4601991c8b4dd2` before exercising the Moodle 5.2-to-5.3 upgrade. No plugin schema migration is required.
+
 ## Final-release checklist
 
 1. Recheck the final Moodle 5.3 revision and upgrade notes against the audited core revision. Rerun CI if core changes affect the APIs or requirements above.
 2. Require all eleven jobs on the plugin release candidate to pass and review its light/dark screenshot artifacts.
-3. Confirm README, Marketplace copy, security policy, repository guidance and changelog agree with `version.php`: Moodle 4.5 through 5.3, plugin 1.0.1, and the unchanged Moodle 4.5 minimum.
+3. Confirm README, Marketplace copy, security policy, repository guidance and changelog agree with `version.php`: Moodle 4.5 through 5.3, plugin 1.1.0, and the unchanged Moodle 4.5 minimum.
 4. Build and validate the installable `coursecoach` package before tagging or publishing. No plugin database upgrade step is needed because this change introduces no tables or schema changes.
 
 For local development, use the checkout's PHPUnit configuration and actual plugin path. On Moodle 4.5/5.0 the plugin path is `report/coursecoach`; on 5.1 and later it is `public/report/coursecoach`. Moodle's site installation and upgrade CLI scripts remain under root `admin/cli`.
