@@ -59,8 +59,12 @@ final class category_criteria_test extends \advanced_testcase {
         $policy['activity_completion_coverage_minpercent'] = 75;
         category_criteria::save($child->id, $policy);
         $this->assertSame(75, category_criteria::resolve($leaf->id)->get_activity_completion_minpercent());
+        $parentpolicy = $policy;
+        $parentpolicy['activity_completion_coverage_minpercent'] = 60;
+        category_criteria::save($parent->id, $parentpolicy);
+        $this->assertSame(75, category_criteria::resolve($leaf->id)->get_activity_completion_minpercent());
         category_criteria::save($child->id, null);
-        $this->assertSame(50, category_criteria::resolve($leaf->id)->get_activity_completion_minpercent());
+        $this->assertSame(60, category_criteria::resolve($leaf->id)->get_activity_completion_minpercent());
         $child->change_parent($other->id);
         $this->assertSame(90, category_criteria::resolve($leaf->id)->get_activity_completion_minpercent());
         $this->assertSame(50, $inherited->get_activity_completion_minpercent());

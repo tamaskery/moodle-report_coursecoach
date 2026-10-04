@@ -139,8 +139,14 @@ class behat_report_coursecoach extends behat_base {
         $url = $this->getSession()->getCurrentUrl();
         $this->getSession()->executeScript("document.querySelector('.mform input[name=sesskey]').value = 'invalid';");
         $this->getSession()->getPage()->pressButton('Save changes');
-        $this->getSession()->wait(10000, 'document.readyState === "complete"');
-        // Moodleform rejects invalid tokens before returning any submitted data.
+        $this->getSession()->wait(10000, "document.querySelector('[data-rel=fatalerror]') !== null");
+        $error = $this->getSession()->getPage()->find('css', '.errorcode a[href$="/invalidsesskey"]');
+        if (!$error) {
+            throw new \Behat\Mink\Exception\ExpectationException(
+                'Category criteria submission did not reject the invalid sesskey.',
+                $this->getSession()
+            );
+        }
         $this->getSession()->visit($url);
     }
 }
