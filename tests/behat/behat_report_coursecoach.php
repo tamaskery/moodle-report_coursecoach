@@ -37,6 +37,23 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
  */
 class behat_report_coursecoach extends behat_base {
     /**
+     * Save a synthetic report screenshot when CI provides an artifact directory.
+     *
+     * @Then /^I save the Course Readiness Coach screenshot as "(?P<name_string>[a-z-]+)"$/
+     * @param string $name Screenshot name.
+     */
+    public function save_report_screenshot(string $name): void {
+        $directory = getenv('COURSECOACH_SCREENSHOT_DIR');
+        if (!$directory) {
+            return;
+        }
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+        file_put_contents($directory . '/' . $name . '.png', $this->getSession()->getDriver()->getScreenshot());
+    }
+
+    /**
      * Verify direct report access is denied for a course identified by short name.
      *
      * Course record IDs are not stable between isolated Behat scenarios, so a

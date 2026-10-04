@@ -23,7 +23,7 @@ jobs:
           --health-cmd="healthcheck.sh --connect --innodb_initialized"
           --health-interval 10s --health-timeout 5s --health-retries 3
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_DB: postgres
           POSTGRES_USER: moodle
@@ -132,6 +132,20 @@ jobs:
         run: moodle-plugin-ci phpmd
       - name: PHPUnit
         run: moodle-plugin-ci phpunit
+      - name: Moodle 5.2 to 5.3 upgrade smoke test
+        if: matrix.moodle-branch == 'MOODLE_503_STABLE' && matrix.database == 'mariadb'
+        run: |
+          cd moodle
+          git fetch --depth=1 origin MOODLE_502_STABLE
+          git checkout --detach FETCH_HEAD
+          composer install --no-interaction --prefer-dist
+          php public/admin/cli/install_database.php --agree-license --adminpass='Upgrade-test-only-123!' --adminemail=admin@example.invalid --fullname='Upgrade test' --shortname=upgrade
+          php ../plugin/.github/scripts/upgrade-smoke.php prepare
+          git fetch --depth=1 origin MOODLE_503_STABLE
+          git checkout --detach FETCH_HEAD
+          composer install --no-interaction --prefer-dist
+          php public/admin/cli/upgrade.php --non-interactive
+          php ../plugin/.github/scripts/upgrade-smoke.php verify
 
   behat:
     name: Behat smoke tests / ${{ matrix.moodle-branch }} / MariaDB
@@ -142,10 +156,13 @@ jobs:
         include:
           - moodle-branch: MOODLE_405_STABLE
             php-version: '8.2'
+            tags: '@report_coursecoach'
           - moodle-branch: MOODLE_502_STABLE
             php-version: '8.3'
+            tags: '@report_coursecoach'
           - moodle-branch: MOODLE_503_STABLE
             php-version: '8.3'
+            tags: '@report_coursecoach,@report_coursecoach_53'
     services:
       mariadb:
         image: mariadb:11
@@ -187,9 +204,18 @@ jobs:
           DB_PASS: ''
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
       - name: Run Course Readiness Coach Behat smoke tests
+        env:
+          COURSECOACH_SCREENSHOT_DIR: ${{ github.workspace }}/coursecoach-screenshots
         run: >-
           moodle-plugin-ci behat --profile chrome
-          --tags="@report_coursecoach" --auto-rerun 0 --dump
+          --tags="${{ matrix.tags }}" --auto-rerun 0 --dump
+      - name: Save Moodle 5.3 report screenshots
+        if: always() && matrix.moodle-branch == 'MOODLE_503_STABLE'
+        uses: actions/upload-artifact@v4
+        with:
+          name: moodle-5.3-report-screenshots
+          path: coursecoach-screenshots/*.png
+          if-no-files-found: error
 
   package-layout:
     name: Installable package layout

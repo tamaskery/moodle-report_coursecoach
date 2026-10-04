@@ -70,6 +70,23 @@ final class activity_date_alignment_test extends advanced_testcase {
     }
 
     /**
+     * Test the Moodle 5.3 quiz due date does not replace the access-window boundary.
+     */
+    public function test_quiz_due_date_does_not_replace_close_date(): void {
+        global $DB;
+
+        if (!$DB->get_manager()->field_exists(new \xmldb_table('quiz'), new \xmldb_field('duedate'))) {
+            $this->markTestSkipped('Quiz due dates are unavailable on this Moodle version.');
+        }
+        $course = $this->create_course();
+        $quiz = $this->create_quiz($course, ['timeopen' => 1_500, 'timeclose' => 0]);
+        $DB->set_field('quiz', 'duedate', 2_500, ['id' => $quiz->id]);
+
+        $this->assertSame(result::STATUS_PASSED, (new activity_date_alignment())->check($course)->get_status());
+        $this->assertSame(2_500, (int) $DB->get_field('quiz', 'duedate', ['id' => $quiz->id]));
+    }
+
+    /**
      * Test a Quiz opening after the course end date warns.
      */
     public function test_quiz_open_after_course_end_warns(): void {

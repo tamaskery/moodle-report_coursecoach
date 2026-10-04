@@ -8,7 +8,7 @@ The review used the official `MOODLE_503_STABLE` branch at commit [`42622298fe06
 
 | Area | Finding and preparation |
 | --- | --- |
-| Server requirements | The published requirements allow PHP 8.3 and 8.4, MariaDB 10.11 or newer, and PostgreSQL 16 or newer. CI adds PHP 8.3/MariaDB 11 and PHP 8.4/PostgreSQL 16 jobs. The plugin's minimum Moodle version stays at 4.5. |
+| Server requirements | The current core `admin/environment.xml` requires MariaDB 11.4 or newer and PostgreSQL 17 or newer for 5.3; the published release notes still list older database minima. CI uses PHP 8.3/MariaDB 11 and PHP 8.4/PostgreSQL 17. The plugin's minimum Moodle version stays at 4.5. |
 | Completion | The inspected `completion_info` methods `is_enabled_for_site()`, `is_enabled()`, `has_criteria()`, and `get_criteria()` remain available. Existing checker tests must pass on 5.3 without developer debugging notices. |
 | Quiz structure | The inspected `quiz_settings::get_structure()`, `structure::get_slots()`, `get_question_type_for_slot()`, and `add_random_questions()` remain available. The new quiz due date does not require expanding this report's existing open/close date check. |
 | Navigation | Core navigation markup changed in 5.3. Browser tests now use `I navigate to "Reports" in current page administration`, which exists in both 4.5 and 5.3 core, instead of selecting `.moremenu.navigation`. Student checks use the enclosing `.secondary-navigation` container and retain direct-access denial coverage. |
