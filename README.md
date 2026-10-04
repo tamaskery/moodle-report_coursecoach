@@ -8,6 +8,8 @@ The plugin type is **Report**, its component is `report_coursecoach`, and versio
 
 ## Installation
 
+See the [user and administrator guide](docs/user-guide.md), [screenshots](docs/screenshots/README.md), and [changelog](CHANGES.md). Submission descriptions and release notes are available in the [Marketplace copy](docs/marketplace.md).
+
 1. Download the plugin package and extract its `coursecoach` directory into your Moodle installation at `report/coursecoach`.
 2. Sign in as a site administrator and visit **Site administration > Notifications**.
 3. Follow Moodle's prompts to complete installation, then purge caches if Moodle requests it.
@@ -49,7 +51,7 @@ Disabled checks are not run or scored and are listed separately as **Disabled by
 
 Upgrading from 1.0.1 with the defaults preserves the existing checks, results, weights and scoring. Missing or malformed settings fall back to the original defaults. No database schema migration is required. Settings are stored through Moodle config APIs; the report does not write settings or store results. A report uses a configuration snapshot; saved settings take effect on the next report request.
 
-Weights, outcome severity and overall labels remain fixed. Configurable severity, readiness profiles and new check types are outside this release.
+Use **Manage category readiness criteria** on the settings page to override the full policy for a category. Courses inherit the nearest configured category, then site defaults. Choose **Inherit from parent category or site** and save to remove an override. Category and course moves use the new ancestry on the next report request. Existing installations have no overrides, so upgrade defaults are unchanged. The report identifies the policy source. Only site administrators can edit overrides; category managers do not gain configuration permissions automatically. Configurable severity, readiness profiles and new check types are outside this release.
 
 ## Score and overall status
 

@@ -65,12 +65,17 @@ final class criteria_config {
     /** @var int Minimum coverage percentage. */
     private int $minpercent;
 
+    /** @var int Category providing this policy, or zero for site settings. */
+    private int $sourcecategoryid;
+
     /**
      * Load one configuration snapshot, or validate explicitly supplied settings.
      *
      * @param array|null $settings Plugin settings; null loads Moodle site configuration.
+     * @param int $sourcecategoryid Category providing the policy, or zero for site settings.
      */
-    public function __construct(?array $settings = null) {
+    public function __construct(?array $settings = null, int $sourcecategoryid = 0) {
+        $this->sourcecategoryid = $sourcecategoryid;
         $settings = $settings ?? (array) get_config('report_coursecoach');
         foreach (array_keys(self::DEFINITIONS) as $id) {
             $value = $settings['enabled_' . $id] ?? self::DEFAULT_ENABLED;
@@ -111,5 +116,28 @@ final class criteria_config {
      */
     public function get_activity_completion_minpercent(): int {
         return $this->minpercent;
+    }
+
+    /**
+     * Return the effective policy's category.
+     *
+     * @return int Category identifier, or zero for site settings.
+     */
+    public function get_source_category_id(): int {
+        return $this->sourcecategoryid;
+    }
+
+    /**
+     * Export the complete validated policy for the category form and storage.
+     *
+     * @return array Canonical settings with integer values.
+     */
+    public function to_array(): array {
+        $settings = [];
+        foreach ($this->enabled as $id => $enabled) {
+            $settings['enabled_' . $id] = (int) $enabled;
+        }
+        $settings['activity_completion_coverage_minpercent'] = $this->minpercent;
+        return $settings;
     }
 }

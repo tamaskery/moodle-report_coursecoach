@@ -27,6 +27,8 @@
     * hasdisabledchecks - Whether site configuration excludes checks.
     * disabledchecks - Titles of disabled checks, separate from evaluated results.
     * alldisabled - Whether every built-in check is disabled.
+    * policysource - Optional plain-text description of the effective policy.
+    * disabledheading - Heading distinguishing site and category exclusions.
 
     Example context (json):
     {
@@ -76,6 +78,7 @@
 }}
 <div class="report-coursecoach-report">
     <p class="lead">{{#str}} reportintro, report_coursecoach {{/str}}</p>
+    {{#policysource}}<p>{{policysource}}</p>{{/policysource}}
 
     <section class="card mb-4" aria-labelledby="report-coursecoach-score-heading">
         <div class="card-body">
@@ -192,7 +195,7 @@
     {{#hasdisabledchecks}}
         <section class="mb-4" aria-labelledby="report-coursecoach-disabled-heading">
             <h2 id="report-coursecoach-disabled-heading" class="h4">
-                {{#str}} disabledchecksheading, report_coursecoach {{/str}}
+                {{disabledheading}}
             </h2>
             <p>{{#str}} disabledchecks_desc, report_coursecoach {{/str}}</p>
             <ul>

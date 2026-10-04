@@ -38,13 +38,18 @@ final class report implements renderable, templatable {
     /** @var readiness Calculated course readiness. */
     private readiness $readiness;
 
+    /** @var criteria_config|null Policy used by the analyser, when available. */
+    private ?criteria_config $config;
+
     /**
      * Constructor.
      *
      * @param readiness $readiness Calculated course readiness.
+     * @param criteria_config|null $config Effective policy used for this report.
      */
-    public function __construct(readiness $readiness) {
+    public function __construct(readiness $readiness, ?criteria_config $config = null) {
         $this->readiness = $readiness;
+        $this->config = $config;
     }
 
     /**
@@ -110,6 +115,11 @@ final class report implements renderable, templatable {
         }
         $assessedstring = $disabledchecks ? 'assessedenabledchecks' : 'assessedchecks';
         return [
+            'policysource' => $this->get_policy_source(),
+            'disabledheading' => get_string(
+                $this->config && $this->config->get_source_category_id() ? 'disabledcategoryheading' : 'disabledchecksheading',
+                'report_coursecoach'
+            ),
             'hasdisabledchecks' => !empty($disabledchecks),
             'alldisabled' => $totalcount === 0 && !empty($disabledchecks),
             'disabledchecks' => $disabledchecks,
@@ -152,6 +162,26 @@ final class report implements renderable, templatable {
             default:
                 return 'bg-secondary text-dark';
         }
+    }
+
+    /**
+     * Describe the actual policy without adding administration links for teachers.
+     *
+     * @return string Plain text for escaped template output.
+     */
+    private function get_policy_source(): string {
+        global $DB;
+        if ($this->config === null) {
+            return '';
+        }
+        $categoryid = $this->config->get_source_category_id();
+        if (!$categoryid) {
+            return get_string('policysourcesite', 'report_coursecoach');
+        }
+        $name = $DB->get_field('course_categories', 'name', ['id' => $categoryid], MUST_EXIST);
+        $name = format_string($name, true, ['context' => \context_coursecat::instance($categoryid)]);
+        $name = html_entity_decode(strip_tags($name), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        return get_string('policysourcecategory', 'report_coursecoach', $name);
     }
 
     /**

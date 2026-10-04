@@ -1,83 +1,95 @@
-# Moodle Marketplace Copy
+# Moodle Marketplace submission copy
 
 ## Plugin name
 
 Course Readiness Coach
 
-## Component
+## Tagline
 
-`report_coursecoach`
-
-## Category/type
-
-Reports
+Open your course with greater confidence.
 
 ## Short description
 
-A read-only course report that helps Moodle teachers and managers identify common configuration issues before learners use a course. It provides deterministic findings, recommendations, and a configuration-readiness score.
+Spot common course setup issues before learners do. Course Readiness Coach brings ten focused checks, a clear readiness score, and practical next steps into one Moodle report—with configurable site defaults and category-specific criteria.
 
 ## Full description
 
-Course Readiness Coach helps editing teachers, course managers, administrators, and other authorised roles review whether a Moodle course is technically configured for learner use. From one course-level report, users can review course visibility and dates, completion configuration, required activity visibility, assessment configuration, learner feedback presence, incomplete sections, and selected activity-date conflicts.
+### A clearer picture before your course opens
 
-The report offers 10 deterministic checks, all enabled by default, and groups the results as passed, warnings, critical findings, or not applicable. Applicable checks contribute to a weighted readiness score, and findings link to relevant Moodle settings where appropriate. The score indicates configuration readiness only; it does not certify pedagogical quality, accessibility, security, or programme suitability.
+A hidden activity. Missing completion settings. Course dates that no longer make sense. Small configuration oversights can get in the way of a smooth course launch.
 
-Course Readiness Coach is read-only. It does not change course settings, activities, grades, quizzes, or learner completion records. It stores no report results or personal data, sends no information outside Moodle, and does not use AI or external APIs.
+**Course Readiness Coach helps teachers and course managers find common setup issues before learners encounter them.** Open the report from your course to see what passed, what needs attention, and where to go next.
 
-Administrators can enable or disable each check and configure the minimum activity completion coverage percentage. Defaults preserve the original results. Disabled checks are disclosed separately and excluded from scoring. Settings are site-wide, stored through Moodle configuration APIs, and do not change course configuration. Weights and outcome severity remain fixed.
+### Turn findings into next steps
 
-The current checks are:
+The report brings together a readiness score, an overall status, and plain-language explanations. Findings include practical recommendations and links to relevant Moodle settings where available, helping you move from reviewing an issue to addressing it.
 
-1. Course visibility
-2. Course dates
-3. Course completion
-4. Activity completion coverage
-5. Required activity visibility
-6. Quiz pass and completion
-7. Quiz question randomisation
-8. Learner feedback
-9. Incomplete course content
-10. Activity date alignment
+Critical findings and warnings appear in the Needs attention section. Passed, not-applicable, and disabled checks remain visible, so you can understand what the report assessed.
 
-## Key features
+### Set criteria that fit your site
 
-- Ten focused course-configuration checks.
-- Issue-first report with readiness score and overall status.
-- Deterministic explanations and recommendations.
-- Moodle settings links for applicable findings.
-- Course-context capability control for authorised roles.
-- Read-only operation with no plugin database tables.
-- Moodle 4.5 through 5.3 support.
+New in version 1.1, administrators can enable or disable each check and set the minimum activity completion coverage from 1% to 100%. Use one consistent policy across your Moodle site, with all ten checks enabled and coverage set to 100% by default.
 
-## Privacy statement
+For example, disable the feedback check if your institution collects evaluations elsewhere, or disable quiz randomisation checks where fixed question sets are intentional. Disabled checks are clearly disclosed and excluded from the score.
 
-The plugin analyses course configuration rather than learner performance. It creates no plugin database tables, stores no personal data or report history, and sends no data to external services. Its Moodle Privacy API implementation is a null provider. Moodle core may independently record normal page access in standard logs.
+### Different categories, different expectations
 
-## Installation
+- **Course visibility:** is the course visible to learners?
+- **Course dates:** do configured dates contain obvious conflicts or an expired end date?
+- **Course completion:** is completion enabled, with course completion criteria configured?
+- **Activity completion coverage:** do enough eligible visible activities have completion configured?
+- **Required activity visibility:** are activities referenced by course completion requirements hidden?
+- **Quiz pass and completion:** do quizzes used for course completion have passing-grade and completion settings?
+- **Quiz question randomisation:** do those quizzes use random-question selection?
+- **Learner feedback:** is a standard Moodle Feedback activity visible?
+- **Incomplete course content:** are visible, non-general sections empty?
+- **Activity date alignment:** do selected Quiz and Assignment dates conflict with course boundaries?
 
-Extract the package's `coursecoach` directory to `report/coursecoach`, then visit **Site administration > Notifications** as an administrator and complete Moodle's standard plugin installation. Authorised users can then open Course Readiness Coach from a course's **More > Reports** area.
+### You stay in control
 
-## Supported Moodle versions
+Course Readiness Coach is read-only. It never changes course content, settings, grades, or learner completion records, and it does not prevent a course from opening. You decide which recommendations to act on.
 
-Moodle 4.5 through Moodle 5.3.
+The plugin uses deterministic Moodle checks. It requires no AI service, external account, API key, or third-party plugin. It sends no data outside Moodle and stores no report history or personal data. Site criteria are saved through Moodle's standard plugin configuration APIs.
 
-## Support and source
+### Designed for course preparation
 
-- Source repository: https://github.com/tamaskery/moodle-report_coursecoach
-- Support and bug tracker: https://github.com/tamaskery/moodle-report_coursecoach/issues
+Editing teachers and managers can access the report by default; administrators can control access through Moodle capabilities. The interface uses Moodle's native presentation and supports Boost light and dark modes where available.
+
+The readiness score describes the configuration checked by this plugin. A Ready result means all applicable, enabled checks passed; it is not a certification of teaching quality, accessibility, security, or every aspect of course readiness. Check weights and outcome severity remain fixed. Per-course profiles and custom rules are not included.
+
+**Before your next course opens, give its setup a focused review.**
+
+## Version 1.1.0 release notes
+
+- Choose which of the ten readiness checks apply across your site, with optional category-specific overrides and parent-category inheritance.
+- Set the activity completion coverage target from 1% to 100%.
+- See disabled checks separately, with an explicit Not assessed state when nothing can be assessed.
+- Keep existing behaviour on upgrade: all checks stay enabled and coverage remains 100% by default.
+- Retain the original scoring, permissions and read-only course analysis, with expanded configuration and upgrade tests.
+
+No plugin database schema migration is required. See [CHANGES.md](../CHANGES.md) for the full version history.
+
+## Listing fields and supporting links
+
+- Component: `report_coursecoach`
+- Category/type: Reports
 - Licence: GNU GPL v3 or later
+- Source: https://github.com/tamaskery/moodle-report_coursecoach
+- Support and bug tracker: https://github.com/tamaskery/moodle-report_coursecoach/issues
+- User and administrator guide: [user-guide.md](user-guide.md)
+- Screenshots, captions and provenance: [screenshot gallery](screenshots/README.md)
+
+## Installation and compatibility
+
+Install the release ZIP through Moodle's plugin installer where available, then complete **Site administration > Notifications**. For manual installation, extract `coursecoach` to `report/coursecoach` on Moodle 4.5/5.0 or `public/report/coursecoach` on Moodle 5.1 and later. Authorised users open the report from the course's **More > Reports** area in the standard navigation.
+
+Tested versions: Moodle 4.5, 5.0, 5.1, 5.2 and the 5.3 pre-release stable branch. **Publisher note:** the 4 October 2026 tests precede Moodle 5.3's scheduled final release. Recheck the final release before listing final 5.3 compatibility. Replace documentation links with public links to the released version when completing the listing.
 
 ## Reviewer notes
 
-- Plugin type: Report
-- Component: `report_coursecoach`
-- Install path: `report/coursecoach`
-- Context: course context
-- Capability: `report/coursecoach:view`
-- Operation: read-only; no course, activity, grade, quiz, or completion-record changes
-- Storage: no plugin database tables, personal data, or persisted report results
-- External processing: no external data transfer, API calls, or AI use
-- Implementation: standard Moodle capabilities, course context, APIs, Output API, and Mustache templates
-- Automated compatibility CI: Moodle 4.5, 5.0, 5.1, 5.2, and 5.3
-- Databases tested: MariaDB and PostgreSQL 17
-- Automated tests: focused PHPUnit suite and Behat access/rendering smoke tests
+- Access: `report/coursecoach:view` in course context; native site configuration requires system `moodle/site:config`.
+- Storage: no plugin tables, personal data, or persisted report results; site criteria use plugin configuration.
+- Privacy: null Privacy API provider; no external processing. Moodle core may log normal page access independently.
+- Validation: 11 passing CI jobs on implementation commit `f03bc079e1c11c94ec647bec07f2b7b776a2a220`, including PHPUnit, browser tests, packaging and upgrade checks. MariaDB and PostgreSQL tested.
+- Evidence: https://github.com/tamaskery/moodle-report_coursecoach/actions/runs/37230012946
+- Screenshots: authentic output from a synthetic acceptance-test site; see gallery for capture details and limitations.

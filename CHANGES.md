@@ -2,6 +2,10 @@
 
 ## 1.1.0
 
+- Added administrator-only category overrides with nearest-parent inheritance, site fallback, and effective-policy disclosure. Existing installations remain unchanged until an override is saved.
+
+- Added a user and administrator guide, authentic synthetic-site screenshots, and Marketplace submission descriptions and release notes.
+
 - Added native, site-wide readiness criteria settings: ten enable switches and a 1–100% activity completion coverage target.
 - Preserved the original engine, result severity, weights, scoring and default behaviour; no schema upgrade is needed.
 - Excluded disabled checks from evaluation and scoring, with separate report disclosure and an explicit all-disabled Not assessed state.

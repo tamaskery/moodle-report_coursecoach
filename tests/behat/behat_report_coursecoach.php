@@ -112,4 +112,35 @@ class behat_report_coursecoach extends behat_base {
     public function invalidate_settings_sesskey(): void {
         $this->getSession()->executeScript("document.querySelector('#adminsettings input[name=sesskey]').value = 'invalid';");
     }
+
+    /**
+     * Verify category policy administration denies course staff direct access.
+     *
+     * @When /^direct Course Readiness Coach category settings access is denied$/
+     */
+    public function direct_category_settings_access_is_denied(): void {
+        $this->getSession()->visit($this->locate_path('/report/coursecoach/category.php'));
+        $error = $this->getSession()->getPage()->find('css', '[data-rel="fatalerror"]');
+        if (!$error || !$error->find('css', '.errorcode a[href$="/nopermissions"]')) {
+            throw new \Behat\Mink\Exception\ExpectationException(
+                'Course staff were not denied access to category criteria.',
+                $this->getSession()
+            );
+        }
+        $this->getSession()->visit($this->locate_path('/'));
+    }
+
+    /**
+     * Submit category criteria with an invalid token and verify rejection.
+     *
+     * @When /^I submit Course Readiness Coach category criteria with an invalid sesskey$/
+     */
+    public function submit_category_criteria_with_invalid_sesskey(): void {
+        $url = $this->getSession()->getCurrentUrl();
+        $this->getSession()->executeScript("document.querySelector('.mform input[name=sesskey]').value = 'invalid';");
+        $this->getSession()->getPage()->pressButton('Save changes');
+        $this->getSession()->wait(10000, 'document.readyState === "complete"');
+        // Moodleform rejects invalid tokens before returning any submitted data.
+        $this->getSession()->visit($url);
+    }
 }

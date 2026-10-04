@@ -1,39 +1,31 @@
-# Marketplace Screenshot Plan
+# Submission screenshots
 
-Capture these screenshots only on a disposable Moodle site using synthetic course data and the Moodle Boost/default presentation. Do not fabricate or composite plugin output.
+These four original PNGs show Course Readiness Coach 1.1.0 on a synthetic Moodle 5.3 acceptance-test site using Boost. They were visually reviewed and copied without editing, compositing or generated content. Names such as Course 1, Editing Teacher and Admin User belong to test fixtures, not real learners.
 
-For every image:
+## Suggested order and captions
 
-- exclude production data, real participant names, personal data, employer or institutional branding, and CEPOL branding;
-- use realistic synthetic course, section, and activity names;
-- hide browser credentials, notifications, host-specific identifiers, and unrelated administration content; and
-- show the actual Course Readiness Coach interface without misleading edits.
+| File | Caption |
+| --- | --- |
+| [01-readiness-overview.png](01-readiness-overview.png) | See your course's readiness score, critical findings and practical next steps in one report. |
+| [02-configured-report.png](02-configured-report.png) | Apply your site's criteria: this example uses a 50% completion target and clearly discloses the disabled feedback check. |
+| [03-readiness-criteria.png](03-readiness-criteria.png) | Choose which checks apply across your Moodle site and set the activity completion coverage target. |
+| [04-dark-mode.png](04-dark-mode.png) | Review the same findings in Moodle Boost dark mode. |
 
-## Screenshot 1 — Readiness overview
+## Capture provenance
 
-Use a synthetic course named **Digital Research Skills** with a mixed configuration. Capture the top of the report showing the Course Readiness Coach heading, overall score and status, assessed-check count, and passed/warning/critical summary. Include enough of the first findings to make the report's purpose immediately clear.
+- Plugin: 1.1.0, version 2026100401.
+- Implementation commit: `f03bc079e1c11c94ec647bec07f2b7b776a2a220`.
+- Moodle: 5.3 pre-release stable branch; settings screenshot shows Build 20261005. This is not evidence of final-release availability.
+- Capture date: 4 October 2026.
+- Workflow: https://github.com/tamaskery/moodle-report_coursecoach/actions/runs/37230012946
+- Artifact: https://github.com/tamaskery/moodle-report_coursecoach/actions/runs/37230012946/artifacts/11312419545
+- Source mapping: light.png, configured-report.png, criteria-settings.png, dark.png respectively.
+- Resolution: 1432 × 3053 pixels each.
 
-Suggested filename: `01-readiness-overview.png`
+## Submission use
 
-## Screenshot 2 — Actionable findings
+Use the first image as the overview, the second to illustrate configurable criteria, and the third for the administrator experience. The fourth is optional.
 
-Configure the same synthetic course to produce several representative findings, such as a hidden course, incomplete completion configuration, or an empty visible section. Capture the **Needs attention** area with explanations, recommendations, and genuine Moodle settings links visible where the plugin provides them. Do not stage learner-specific or sensitive data.
+These are full-page CI captures: they include the acceptance-test site name, generic course names, page footers and unused space. The settings image includes Moodle's developer footer. They are accurate supporting screenshots; a later capture on a polished synthetic demo site would improve presentation. There is no captured all-passing Ready example in this set.
 
-Suggested filename: `02-actionable-findings.png`
-
-## Screenshot 3 — Ready course
-
-Use a separate synthetic course named **Moodle Orientation Demo** with all applicable checks passing. Capture the summary and compact passed-results presentation showing a strong **Ready** state. Ensure any not-applicable results reflect the real synthetic configuration rather than edited output.
-
-Suggested filename: `03-ready-course.png`
-
-## Capture checklist
-
-1. Confirm the site contains synthetic/demo data only.
-2. Use an authorised editing-teacher or manager account with no identifying name visible in the crop.
-3. Set a consistent desktop viewport large enough to show the report without mobile reflow.
-4. Review every visible string, avatar, breadcrumb, and URL before saving.
-5. Record the Moodle and plugin versions used for traceability outside the image.
-6. Verify the saved images accurately match the current plugin UI.
-
-No screenshot image assets are committed until they have been captured and reviewed against this checklist.
+If replacing them, use genuine output with synthetic data only. Exclude personal information, credentials and institutional branding, keep findings accurate, and record the capture versions. Do not fabricate or composite a Ready result.

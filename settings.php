@@ -24,7 +24,25 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+if ($hassiteconfig) {
+    $ADMIN->add('reports', new admin_externalpage(
+        'reportcoursecoachcategories',
+        get_string('categorycriteria', 'report_coursecoach'),
+        new moodle_url('/report/coursecoach/category.php'),
+        'moodle/site:config',
+        true
+    ));
+}
+
 if ($hassiteconfig && $ADMIN->fulltree) {
+    $settings->add(new admin_setting_heading(
+        'report_coursecoach/categorycriteria',
+        get_string('categorycriteria', 'report_coursecoach'),
+        html_writer::link(
+            new moodle_url('/report/coursecoach/category.php'),
+            get_string('managecategorycriteria', 'report_coursecoach')
+        )
+    ));
     $settings->add(new admin_setting_heading(
         'report_coursecoach/criteria',
         get_string('criteria', 'report_coursecoach'),

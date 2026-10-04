@@ -39,6 +39,9 @@ final class course_analyser {
     /** @var string[] Identifiers of checks excluded by site configuration. */
     private array $disabledchecks = [];
 
+    /** @var bool Resolve policy separately for each course when no configuration is supplied. */
+    private bool $resolvepolicy;
+
     /**
      * Constructor.
      *
@@ -46,6 +49,11 @@ final class course_analyser {
      * @param criteria_config|null $config Optional criteria for the built-in checkers; ignored for an explicit checker list.
      */
     public function __construct(?array $checkers = null, ?criteria_config $config = null) {
+        $this->resolvepolicy = $checkers === null && $config === null;
+        if ($this->resolvepolicy) {
+            $this->checkers = [];
+            return;
+        }
         if ($checkers === null) {
             $config = $config ?? new criteria_config();
             $checkers = [];
@@ -76,6 +84,10 @@ final class course_analyser {
      * @return readiness Calculated course readiness.
      */
     public function analyse(stdClass $course): readiness {
+        if ($this->resolvepolicy) {
+            $config = category_criteria::resolve((int) $course->category);
+            return (new self(null, $config))->analyse($course);
+        }
         $results = [];
         foreach ($this->checkers as $checker) {
             $results[] = new weighted_result($checker->check($course), $checker->get_weight());
