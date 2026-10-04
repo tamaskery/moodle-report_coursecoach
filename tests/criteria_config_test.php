@@ -119,7 +119,7 @@ final class criteria_config_test extends advanced_testcase {
         $page = $admin->locate('reportcoursecoach');
         $this->assertInstanceOf(\admin_settingpage::class, $page);
         $this->assertTrue($page->check_access());
-        foreach (criteria_config::get_definitions() as $id => $definition) {
+        foreach (array_keys(criteria_config::get_definitions()) as $id) {
             $setting = $page->settings->{'report_coursecoachenabled_' . $id};
             $this->assertSame(criteria_config::DEFAULT_ENABLED, $setting->get_defaultsetting());
         }

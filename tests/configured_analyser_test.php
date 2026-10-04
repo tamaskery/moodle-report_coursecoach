@@ -87,7 +87,7 @@ final class configured_analyser_test extends advanced_testcase {
      */
     public function test_all_disabled_does_not_read_a_course(): void {
         $settings = [];
-        foreach (criteria_config::get_definitions() as $id => $definition) {
+        foreach (array_keys(criteria_config::get_definitions()) as $id) {
             $settings['enabled_' . $id] = 0;
         }
         // An empty object cannot be evaluated by the built-in checkers.

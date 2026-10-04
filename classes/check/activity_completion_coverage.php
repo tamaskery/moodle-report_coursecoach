@@ -98,10 +98,7 @@ final class activity_completion_coverage implements checker {
                 result::STATUS_WARNING,
                 result::SEVERITY_IMPORTANT,
                 $title,
-                $this->minpercent === 100 ? get_string('check:coverage:warning:explanation', 'report_coursecoach', (object) [
-                    'count' => count($unconfigured),
-                    'activities' => $coverage->activities,
-                ]) : get_string('check:coverage:threshold:warning', 'report_coursecoach', $coverage),
+                $this->get_explanation(false, $coverage),
                 get_string('check:coverage:warning:recommendation', 'report_coursecoach'),
                 new moodle_url('/course/modedit.php', ['update' => $unconfigured[0]->id, 'return' => 0]),
                 get_string('action:activitycompletion', 'report_coursecoach')
@@ -113,11 +110,30 @@ final class activity_completion_coverage implements checker {
             result::STATUS_PASSED,
             result::SEVERITY_RECOMMENDATION,
             $title,
-            $this->minpercent === 100
-                ? get_string('check:coverage:passed:explanation', 'report_coursecoach', count($applicable))
-                : get_string('check:coverage:threshold:passed', 'report_coursecoach', $coverage),
+            $this->get_explanation(true, $coverage),
             get_string('check:coverage:passed:recommendation', 'report_coursecoach')
         );
+    }
+
+    /**
+     * Describe the actual coverage while preserving the original default wording.
+     *
+     * @param bool $passed Whether the threshold is met.
+     * @param stdClass $coverage Counts, required percentage and unconfigured activity names.
+     * @return string Localised explanation.
+     */
+    private function get_explanation(bool $passed, stdClass $coverage): string {
+        if ($this->minpercent !== 100) {
+            $identifier = $passed ? 'check:coverage:threshold:passed' : 'check:coverage:threshold:warning';
+            return get_string($identifier, 'report_coursecoach', $coverage);
+        }
+        if ($passed) {
+            return get_string('check:coverage:passed:explanation', 'report_coursecoach', $coverage->total);
+        }
+        return get_string('check:coverage:warning:explanation', 'report_coursecoach', (object) [
+            'count' => $coverage->total - $coverage->configured,
+            'activities' => $coverage->activities,
+        ]);
     }
 
     /**

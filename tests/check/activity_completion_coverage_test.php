@@ -140,7 +140,7 @@ final class activity_completion_coverage_test extends advanced_testcase {
             $this->assertSame(result::STATUS_WARNING, $result->get_status());
             $this->assertSame(result::SEVERITY_IMPORTANT, $result->get_severity());
             $this->assertStringContainsString('Missing & needed', $result->get_explanation());
-            $this->assertSame($missing->cmid, $result->get_settings_url()->get_param('update'));
+            $this->assertSame((string) $missing->cmid, $result->get_settings_url()->get_param('update'));
         }
         $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'completion' => COMPLETION_TRACKING_MANUAL]);
         $this->assertSame(result::STATUS_PASSED, (new activity_completion_coverage(75))->check($course)->get_status());

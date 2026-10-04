@@ -72,7 +72,7 @@ final class criteria_config {
      */
     public function __construct(?array $settings = null) {
         $settings = $settings ?? (array) get_config('report_coursecoach');
-        foreach (self::DEFINITIONS as $id => $definition) {
+        foreach (array_keys(self::DEFINITIONS) as $id) {
             $value = $settings['enabled_' . $id] ?? self::DEFAULT_ENABLED;
             $this->enabled[$id] = !in_array($value, [0, '0', false], true);
         }
