@@ -139,12 +139,12 @@ jobs:
           git fetch --depth=1 origin MOODLE_502_STABLE
           git checkout --detach FETCH_HEAD
           composer install --no-interaction --prefer-dist
-          php public/admin/cli/install_database.php --agree-license --adminpass='Upgrade-test-only-123!' --adminemail=admin@example.invalid --fullname='Upgrade test' --shortname=upgrade
+          php admin/cli/install_database.php --agree-license --adminpass='Upgrade-test-only-123!' --adminemail=admin@example.invalid --fullname='Upgrade test' --shortname=upgrade
           php ../plugin/.github/scripts/upgrade-smoke.php prepare
           git fetch --depth=1 origin MOODLE_503_STABLE
           git checkout --detach FETCH_HEAD
           composer install --no-interaction --prefer-dist
-          php public/admin/cli/upgrade.php --non-interactive
+          php admin/cli/upgrade.php --non-interactive
           php ../plugin/.github/scripts/upgrade-smoke.php verify
 
   behat:
