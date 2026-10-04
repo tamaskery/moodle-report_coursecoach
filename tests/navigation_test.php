@@ -25,6 +25,7 @@
 namespace report_coursecoach;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversFunction;
 use context_course;
 use context_system;
 use navigation_node;
@@ -36,6 +37,7 @@ require_once(__DIR__ . '/../lib.php');
 /**
  * Verifies that the course report navigation honours its capability.
  */
+#[CoversFunction('report_coursecoach_extend_navigation_course')]
 final class navigation_test extends advanced_testcase {
     /**
      * Test editing teachers and managers see the report while students do not.

@@ -25,12 +25,12 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Verifies that name formatting produces semantic text for the output layer.
- *
- * @covers \report_coursecoach\check\name_formatter
  */
+#[CoversClass(\report_coursecoach\check\name_formatter::class)]
 final class name_formatter_test extends advanced_testcase {
     /**
      * Test activity formatting preserves context and defers HTML escaping.

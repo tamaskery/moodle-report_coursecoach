@@ -25,13 +25,13 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use mod_quiz\quiz_settings;
 
 /**
  * Tests the quiz question randomisation checker.
- *
- * @covers \report_coursecoach\check\quiz_question_randomisation
  */
+#[CoversClass(\report_coursecoach\check\quiz_question_randomisation::class)]
 final class quiz_question_randomisation_test extends advanced_testcase {
     /** @var \stdClass|null Quiz created for the current test. */
     private ?\stdClass $quiz = null;

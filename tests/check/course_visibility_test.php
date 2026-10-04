@@ -25,12 +25,12 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests course visibility outcomes.
- *
- * @covers \report_coursecoach\check\course_visibility
  */
+#[CoversClass(\report_coursecoach\check\course_visibility::class)]
 final class course_visibility_test extends advanced_testcase {
     /**
      * Test a visible course.

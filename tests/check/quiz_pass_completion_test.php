@@ -25,13 +25,13 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use grade_item;
 
 /**
  * Tests completion-path quizzes using Moodle generators and grade settings.
- *
- * @covers \report_coursecoach\check\quiz_pass_completion
  */
+#[CoversClass(\report_coursecoach\check\quiz_pass_completion::class)]
 final class quiz_pass_completion_test extends advanced_testcase {
     /**
      * Enable completion tracking for each test.

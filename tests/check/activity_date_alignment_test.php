@@ -25,12 +25,12 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests conservative Quiz and Assignment date comparisons.
- *
- * @covers \report_coursecoach\check\activity_date_alignment
  */
+#[CoversClass(\report_coursecoach\check\activity_date_alignment::class)]
 final class activity_date_alignment_test extends advanced_testcase {
     /**
      * Reset Moodle state before each test.

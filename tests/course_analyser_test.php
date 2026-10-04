@@ -25,13 +25,13 @@
 namespace report_coursecoach;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use completion_info;
 
 /**
  * Verifies that the complete report leaves configuration and learner data unchanged.
- *
- * @covers \report_coursecoach\course_analyser
  */
+#[CoversClass(\report_coursecoach\course_analyser::class)]
 final class course_analyser_test extends advanced_testcase {
     /**
      * Test repeated analysis preserves course settings and existing completion data.
@@ -90,12 +90,14 @@ final class course_analyser_test extends advanced_testcase {
         global $DB;
 
         $records = [];
-        foreach ([
-            'course', 'course_sections', 'course_modules', 'quiz', 'quiz_slots', 'assign', 'page', 'feedback',
-            'grade_items', 'grade_grades', 'quiz_attempts', 'course_completion_criteria',
-            'course_completion_aggr_methd', 'course_completions', 'course_completion_crit_compl',
-            'course_modules_completion',
-        ] as $table) {
+        foreach (
+            [
+                'course', 'course_sections', 'course_modules', 'quiz', 'quiz_slots', 'assign', 'page', 'feedback',
+                'grade_items', 'grade_grades', 'quiz_attempts', 'course_completion_criteria',
+                'course_completion_aggr_methd', 'course_completions', 'course_completion_crit_compl',
+                'course_modules_completion',
+            ] as $table
+        ) {
             $records[$table] = $DB->get_records($table, null, 'id');
         }
         return $records;

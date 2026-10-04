@@ -25,12 +25,12 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests deterministic hidden-state checks for completion criteria activities.
- *
- * @covers \report_coursecoach\check\required_completion_activity_accessibility
  */
+#[CoversClass(\report_coursecoach\check\required_completion_activity_accessibility::class)]
 final class required_completion_activity_accessibility_test extends advanced_testcase {
     /**
      * Enable completion tracking for each test.

@@ -25,12 +25,12 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests reliable course date outcomes.
- *
- * @covers \report_coursecoach\check\course_dates
  */
+#[CoversClass(\report_coursecoach\check\course_dates::class)]
 final class course_dates_test extends advanced_testcase {
     /**
      * Test a valid start and end date.

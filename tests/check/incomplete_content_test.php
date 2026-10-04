@@ -25,12 +25,12 @@
 namespace report_coursecoach\check;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests the incomplete content checker.
- *
- * @covers \report_coursecoach\check\incomplete_content
  */
+#[CoversClass(\report_coursecoach\check\incomplete_content::class)]
 final class incomplete_content_test extends advanced_testcase {
     /**
      * Test a visible empty non-general section warns.

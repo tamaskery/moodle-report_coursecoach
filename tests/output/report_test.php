@@ -25,6 +25,7 @@
 namespace report_coursecoach\output;
 
 use advanced_testcase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use report_coursecoach\check\result;
 use report_coursecoach\readiness_calculator;
 use report_coursecoach\weighted_result;
@@ -35,6 +36,7 @@ use renderer_base;
  * Verifies deterministic template grouping, counts, and presentation flags.
  *
  */
+#[CoversClass(\report_coursecoach\output\report::class)]
 final class report_test extends advanced_testcase {
     /**
      * Test mixed results are grouped once with stable priority and checker order.
