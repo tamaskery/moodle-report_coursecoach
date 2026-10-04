@@ -90,6 +90,6 @@ Tested versions: Moodle 4.5, 5.0, 5.1, 5.2 and the 5.3 pre-release stable branch
 - Access: `report/coursecoach:view` in course context; native site configuration requires system `moodle/site:config`.
 - Storage: no plugin tables, personal data, or persisted report results; site criteria use plugin configuration.
 - Privacy: null Privacy API provider; no external processing. Moodle core may log normal page access independently.
-- Validation: 11 passing CI jobs on implementation commit `f03bc079e1c11c94ec647bec07f2b7b776a2a220`, including PHPUnit, browser tests, packaging and upgrade checks. MariaDB and PostgreSQL tested.
-- Evidence: https://github.com/tamaskery/moodle-report_coursecoach/actions/runs/37230012946
+- Validation: 11 passing CI jobs on implementation commit `a5772e90ac4ef35e4ac698afd256446fb060b090`, including PHPUnit, browser tests, packaging and upgrade checks. MariaDB and PostgreSQL tested.
+- Evidence: https://github.com/tamaskery/moodle-report_coursecoach/actions/runs/37231932815
 - Screenshots: authentic output from a synthetic acceptance-test site; see gallery for capture details and limitations.
