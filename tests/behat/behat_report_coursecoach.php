@@ -50,6 +50,7 @@ class behat_report_coursecoach extends behat_base {
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
+        $this->getSession()->resizeWindow(1440, 3200);
         file_put_contents($directory . '/' . $name . '.png', $this->getSession()->getDriver()->getScreenshot());
     }
 

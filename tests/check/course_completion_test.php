@@ -29,6 +29,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests completion configuration through Moodle's completion API.
+ *
+ * @covers \report_coursecoach\check\course_completion
  */
 #[CoversClass(\report_coursecoach\check\course_completion::class)]
 final class course_completion_test extends advanced_testcase {

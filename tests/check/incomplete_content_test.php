@@ -29,6 +29,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests the incomplete content checker.
+ *
+ * @covers \report_coursecoach\check\incomplete_content
  */
 #[CoversClass(\report_coursecoach\check\incomplete_content::class)]
 final class incomplete_content_test extends advanced_testcase {

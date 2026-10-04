@@ -29,6 +29,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests the feedback presence checker.
+ *
+ * @covers \report_coursecoach\check\feedback_presence
  */
 #[CoversClass(\report_coursecoach\check\feedback_presence::class)]
 final class feedback_presence_test extends advanced_testcase {

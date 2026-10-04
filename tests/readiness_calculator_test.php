@@ -30,6 +30,8 @@ use report_coursecoach\check\result;
 
 /**
  * Tests scoring independently of presentation.
+ *
+ * @covers \report_coursecoach\readiness_calculator
  */
 #[CoversClass(\report_coursecoach\readiness_calculator::class)]
 final class readiness_calculator_test extends advanced_testcase {

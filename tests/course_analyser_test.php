@@ -30,6 +30,8 @@ use completion_info;
 
 /**
  * Verifies that the complete report leaves configuration and learner data unchanged.
+ *
+ * @covers \report_coursecoach\course_analyser
  */
 #[CoversClass(\report_coursecoach\course_analyser::class)]
 final class course_analyser_test extends advanced_testcase {

@@ -1,4 +1,4 @@
-@report @report_coursecoach_53 @javascript
+@report @report_coursecoach @report_coursecoach_53 @javascript
 Feature: Display Course Readiness Coach in Moodle 5.3 colour modes
   In order to review course readiness in my chosen colour mode
   As an editing teacher

@@ -35,6 +35,8 @@ use renderer_base;
 /**
  * Verifies deterministic template grouping, counts, and presentation flags.
  *
+ *
+ * @covers \report_coursecoach\output\report
  */
 #[CoversClass(\report_coursecoach\output\report::class)]
 final class report_test extends advanced_testcase {

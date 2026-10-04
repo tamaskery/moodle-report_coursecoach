@@ -36,6 +36,8 @@ require_once(__DIR__ . '/../lib.php');
 
 /**
  * Verifies that the course report navigation honours its capability.
+ *
+ * @covers ::report_coursecoach_extend_navigation_course
  */
 #[CoversFunction('report_coursecoach_extend_navigation_course')]
 final class navigation_test extends advanced_testcase {

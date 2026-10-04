@@ -29,6 +29,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests Moodle-defined activity completion applicability and configuration.
+ *
+ * @covers \report_coursecoach\check\activity_completion_coverage
  */
 #[CoversClass(\report_coursecoach\check\activity_completion_coverage::class)]
 final class activity_completion_coverage_test extends advanced_testcase {

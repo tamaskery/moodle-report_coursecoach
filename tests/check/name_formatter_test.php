@@ -29,6 +29,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Verifies that name formatting produces semantic text for the output layer.
+ *
+ * @covers \report_coursecoach\check\name_formatter
  */
 #[CoversClass(\report_coursecoach\check\name_formatter::class)]
 final class name_formatter_test extends advanced_testcase {

@@ -30,6 +30,8 @@ use grade_item;
 
 /**
  * Tests completion-path quizzes using Moodle generators and grade settings.
+ *
+ * @covers \report_coursecoach\check\quiz_pass_completion
  */
 #[CoversClass(\report_coursecoach\check\quiz_pass_completion::class)]
 final class quiz_pass_completion_test extends advanced_testcase {
