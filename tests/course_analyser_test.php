@@ -64,10 +64,11 @@ final class course_analyser_test extends advanced_testcase {
         ]);
         $generator->create_module('assign', ['course' => $course->id]);
         $generator->create_module('feedback', ['course' => $course->id]);
-        (new \completion_criteria_activity())->update_config((object) [
+        $criteria = (object) [
             'id' => $course->id,
             'criteria_activity' => [$quiz->cmid => 1],
-        ]);
+        ];
+        (new \completion_criteria_activity())->update_config($criteria);
         $student = $generator->create_user();
         $generator->enrol_user($student->id, $course->id, 'student');
         $cm = get_fast_modinfo($course)->get_cm($page->cmid);

@@ -26,8 +26,10 @@ Feature: Display Course Readiness Coach in Moodle 5.3 colour modes
     And I should see "Not ready"
     And I should see "Course visibility"
     And I should see "Course completion"
+    And "div[role='progressbar'][aria-valuemin='0'][aria-valuemax='100']" "css_element" should exist
     And I save the Course Readiness Coach screenshot as "<mode>"
-    When I click on "Edit course visibility" "link"
+    When I set the focus on the "Edit course visibility" "link"
+    And I press the enter key
     Then "#id_fullname" "css_element" should exist
 
     Examples:
