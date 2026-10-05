@@ -25,6 +25,7 @@
 namespace report_coursecoach\output;
 
 use report_coursecoach\check\result;
+use report_coursecoach\criteria_config;
 use report_coursecoach\readiness;
 use renderable;
 use renderer_base;
@@ -37,13 +38,18 @@ final class report implements renderable, templatable {
     /** @var readiness Calculated course readiness. */
     private readiness $readiness;
 
+    /** @var criteria_config|null Policy used by the analyser, when available. */
+    private ?criteria_config $config;
+
     /**
      * Constructor.
      *
      * @param readiness $readiness Calculated course readiness.
+     * @param criteria_config|null $config Effective policy used for this report.
      */
-    public function __construct(readiness $readiness) {
+    public function __construct(readiness $readiness, ?criteria_config $config = null) {
         $this->readiness = $readiness;
+        $this->config = $config;
     }
 
     /**
@@ -102,7 +108,22 @@ final class report implements renderable, templatable {
 
         $score = $this->readiness->get_score();
         $totalcount = count($this->readiness->get_results());
+        $definitions = criteria_config::get_definitions();
+        $disabledchecks = [];
+        foreach ($this->readiness->get_disabled_checks() as $id) {
+            $disabledchecks[] = ['title' => get_string($definitions[$id]['title'], 'report_coursecoach')];
+        }
+        $assessedstring = $disabledchecks ? 'assessedenabledchecks' : 'assessedchecks';
         return [
+            'policysource' => $this->get_policy_source(),
+            'disabledheading' => get_string(
+                $this->config && $this->config->get_source_category_id() ? 'disabledcategoryheading' : 'disabledchecksheading',
+                'report_coursecoach'
+            ),
+            'hasdisabledchecks' => !empty($disabledchecks),
+            'alldisabled' => $totalcount === 0 && !empty($disabledchecks),
+            'disabledchecks' => $disabledchecks,
+            'disabledcount' => count($disabledchecks),
             'score' => $score,
             'readinesslabel' => $this->get_readiness_label(),
             'readinessclass' => $this->get_readiness_class(),
@@ -111,7 +132,7 @@ final class report implements renderable, templatable {
             'criticalcount' => $this->readiness->get_critical_count(),
             'assessedcount' => $assessedcount,
             'totalcount' => $totalcount,
-            'assessedchecks' => get_string('assessedchecks', 'report_coursecoach', (object) [
+            'assessedchecks' => get_string($assessedstring, 'report_coursecoach', (object) [
                 'assessed' => $assessedcount,
                 'total' => $totalcount,
             ]),
@@ -141,6 +162,26 @@ final class report implements renderable, templatable {
             default:
                 return 'bg-secondary text-dark';
         }
+    }
+
+    /**
+     * Describe the actual policy without adding administration links for teachers.
+     *
+     * @return string Plain text for escaped template output.
+     */
+    private function get_policy_source(): string {
+        global $DB;
+        if ($this->config === null) {
+            return '';
+        }
+        $categoryid = $this->config->get_source_category_id();
+        if (!$categoryid) {
+            return get_string('policysourcesite', 'report_coursecoach');
+        }
+        $name = $DB->get_field('course_categories', 'name', ['id' => $categoryid], MUST_EXIST);
+        $name = format_string($name, true, ['context' => \context_coursecat::instance($categoryid)]);
+        $name = html_entity_decode(strip_tags($name), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        return get_string('policysourcecategory', 'report_coursecoach', $name);
     }
 
     /**

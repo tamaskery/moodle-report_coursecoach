@@ -91,6 +91,7 @@ jobs:
         with:
           path: plugin
           persist-credentials: false
+          fetch-depth: 0
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -139,7 +140,20 @@ jobs:
           git fetch --depth=1 origin MOODLE_502_STABLE
           git checkout --detach FETCH_HEAD
           composer install --no-interaction --prefer-dist
+          # Install the exact audited plugin before exercising a real plugin upgrade.
+          reportpath=public/report/coursecoach
+          if test -L "$reportpath"; then
+            unlink "$reportpath"
+          else
+            mv "$reportpath" ../coursecoach-ci-installed
+          fi
+          mkdir -p "$reportpath"
+          git -C ../plugin archive 8a7eec02ce932e34b37011599f4601991c8b4dd2 | tar -xf - -C "$reportpath"
           php admin/cli/install_database.php --agree-license --adminpass='Upgrade-test-only-123!' --adminemail=admin@example.invalid --fullname='Upgrade test' --shortname=upgrade
+          php ../plugin/.github/scripts/plugin-upgrade-smoke.php prepare
+          rsync -a --delete --exclude=.git --exclude=.github ../plugin/ "$reportpath/"
+          php admin/cli/upgrade.php --non-interactive
+          php ../plugin/.github/scripts/plugin-upgrade-smoke.php verify
           php ../plugin/.github/scripts/upgrade-smoke.php prepare
           git fetch --depth=1 origin MOODLE_503_STABLE
           git checkout --detach FETCH_HEAD
@@ -180,6 +194,7 @@ jobs:
         with:
           path: plugin
           persist-credentials: false
+          fetch-depth: 0
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:

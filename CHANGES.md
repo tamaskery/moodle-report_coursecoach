@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0
+
+- Added administrator-only category overrides with nearest-parent inheritance, site fallback, and effective-policy disclosure. Existing installations remain unchanged until an override is saved.
+
+- Added a user and administrator guide, authentic synthetic-site screenshots, and Marketplace submission descriptions and release notes.
+
+- Added native, site-wide readiness criteria settings: ten enable switches and a 1–100% activity completion coverage target.
+- Preserved the original engine, result severity, weights, scoring and default behaviour; no schema upgrade is needed.
+- Excluded disabled checks from evaluation and scoring, with separate report disclosure and an explicit all-disabled Not assessed state.
+- Added strict configuration validation, exact percentage comparisons, configuration/access/output tests, and a real 1.0.1-to-1.1.0 plugin-upgrade comparison in CI.
+- Kept course analysis read-only. Administrator settings save only plugin policy; no profiles, severity overrides or new check types are introduced.
+
 ## 1.0.1
 
 - Added Moodle 5.3 support while retaining Moodle 4.5 through 5.2 compatibility.

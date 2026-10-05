@@ -40,9 +40,10 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->navbar->add($title, $url);
 
-$analyser = new \report_coursecoach\course_analyser();
+$config = \report_coursecoach\category_criteria::resolve((int) $course->category);
+$analyser = new \report_coursecoach\course_analyser(null, $config);
 $readiness = $analyser->analyse($course);
-$report = new \report_coursecoach\output\report($readiness);
+$report = new \report_coursecoach\output\report($readiness, $config);
 $renderer = $PAGE->get_renderer('report_coursecoach');
 
 echo $OUTPUT->header();

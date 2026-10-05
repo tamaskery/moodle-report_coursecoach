@@ -82,6 +82,11 @@ final class course_analyser_test extends advanced_testcase {
         $this->assertCount(10, $first->get_results());
         $this->assertEquals($first, $second);
         $this->assertEquals($before, $this->snapshot());
+        $configured = new course_analyser(null, new criteria_config([
+            'enabled_feedback_presence' => 0, 'activity_completion_coverage_minpercent' => 50,
+        ]));
+        $this->assertEquals($configured->analyse($course), $configured->analyse($course));
+        $this->assertEquals($before, $this->snapshot());
     }
 
     /**
@@ -96,7 +101,7 @@ final class course_analyser_test extends advanced_testcase {
         foreach (
             [
                 'course', 'course_sections', 'course_modules', 'quiz', 'quiz_slots', 'assign', 'page', 'feedback',
-                'grade_items', 'grade_grades', 'quiz_attempts', 'course_completion_criteria',
+                'config_plugins', 'grade_items', 'grade_grades', 'quiz_attempts', 'course_completion_criteria',
                 'course_completion_aggr_methd', 'course_completions', 'course_completion_crit_compl',
                 'course_modules_completion',
             ] as $table

@@ -42,9 +42,10 @@ final class readiness_calculator {
      * Calculate readiness.
      *
      * @param weighted_result[] $weightedresults Weighted checker results.
+     * @param string[] $disabledchecks Disabled check identifiers for report disclosure only.
      * @return readiness Calculated readiness.
      */
-    public function calculate(array $weightedresults): readiness {
+    public function calculate(array $weightedresults, array $disabledchecks = []): readiness {
         $availableweight = 0;
         $earnedweight = 0.0;
         $counts = [
@@ -77,7 +78,8 @@ final class readiness_calculator {
                 readiness::LABEL_NOT_ASSESSED,
                 $counts[result::STATUS_PASSED],
                 $counts[result::STATUS_WARNING],
-                $counts[result::STATUS_CRITICAL]
+                $counts[result::STATUS_CRITICAL],
+                $disabledchecks
             );
         }
 
@@ -90,7 +92,8 @@ final class readiness_calculator {
             $label,
             $counts[result::STATUS_PASSED],
             $counts[result::STATUS_WARNING],
-            $counts[result::STATUS_CRITICAL]
+            $counts[result::STATUS_CRITICAL],
+            $disabledchecks
         );
     }
 

@@ -58,6 +58,9 @@ final class readiness {
     /** @var int Number of critical issues. */
     private int $criticalcount;
 
+    /** @var string[] Disabled check identifiers, separate from evaluated results. */
+    private array $disabledchecks;
+
     /**
      * Constructor.
      *
@@ -67,6 +70,7 @@ final class readiness {
      * @param int $passedcount Number of passed checks.
      * @param int $warningcount Number of warnings.
      * @param int $criticalcount Number of critical issues.
+     * @param string[] $disabledchecks Disabled check identifiers.
      */
     public function __construct(
         array $results,
@@ -74,7 +78,8 @@ final class readiness {
         string $label,
         int $passedcount,
         int $warningcount,
-        int $criticalcount
+        int $criticalcount,
+        array $disabledchecks = []
     ) {
         $this->results = $results;
         $this->score = $score;
@@ -82,6 +87,16 @@ final class readiness {
         $this->passedcount = $passedcount;
         $this->warningcount = $warningcount;
         $this->criticalcount = $criticalcount;
+        $this->disabledchecks = $disabledchecks;
+    }
+
+    /**
+     * Return checks excluded by site configuration.
+     *
+     * @return string[] Disabled check identifiers.
+     */
+    public function get_disabled_checks(): array {
+        return $this->disabledchecks;
     }
 
     /**

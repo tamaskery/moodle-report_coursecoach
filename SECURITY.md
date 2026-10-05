@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are provided for the current 1.0.x release line on supported Moodle versions 4.5 through 5.3. Earlier 0.3.x, 0.4.x, 0.5.x, and 0.6.x releases are no longer supported.
+Security fixes are provided for the current 1.1.x release line on supported Moodle versions 4.5 through 5.3. Earlier 0.3.x, 0.4.x, 0.5.x, and 0.6.x releases are no longer supported.
 
 ## Reporting a vulnerability
 

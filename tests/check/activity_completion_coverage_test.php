@@ -118,4 +118,53 @@ final class activity_completion_coverage_test extends advanced_testcase {
 
         $this->assertSame(result::STATUS_NOT_APPLICABLE, $result->get_status());
     }
+    /**
+     * Test exact coverage boundaries without rounded-percentage decisions.
+     */
+    public function test_configured_percentage_boundaries(): void {
+        $course = $this->getDataGenerator()->create_course(['enablecompletion' => 1, 'newsitems' => 0]);
+        $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'completion' => COMPLETION_TRACKING_MANUAL]);
+        $this->getDataGenerator()->create_module('assign', [
+            'course' => $course->id, 'completion' => COMPLETION_TRACKING_AUTOMATIC, 'completionview' => 1,
+        ]);
+        $missing = $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'name' => 'Missing & needed']);
+        foreach ([1, 50, 66] as $threshold) {
+            $result = (new activity_completion_coverage($threshold))->check($course);
+            $this->assertSame(result::STATUS_PASSED, $result->get_status());
+            $this->assertStringContainsString('2 of 3', $result->get_explanation());
+            $this->assertStringContainsString($threshold . '%', $result->get_explanation());
+            $this->assertNull($result->get_settings_url());
+        }
+        foreach ([67, 80, 100] as $threshold) {
+            $result = (new activity_completion_coverage($threshold))->check($course);
+            $this->assertSame(result::STATUS_WARNING, $result->get_status());
+            $this->assertSame(result::SEVERITY_IMPORTANT, $result->get_severity());
+            $this->assertStringContainsString('Missing & needed', $result->get_explanation());
+            $this->assertSame((string) $missing->cmid, $result->get_settings_url()->get_param('update'));
+        }
+        $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'completion' => COMPLETION_TRACKING_MANUAL]);
+        $this->assertSame(result::STATUS_PASSED, (new activity_completion_coverage(75))->check($course)->get_status());
+        $this->assertSame(result::STATUS_WARNING, (new activity_completion_coverage(76))->check($course)->get_status());
+    }
+
+    /**
+     * Test configuration does not change applicability or include hidden eligible activities.
+     */
+    public function test_threshold_preserves_applicability_and_hidden_exclusion(): void {
+        $course = $this->getDataGenerator()->create_course(['enablecompletion' => 1, 'newsitems' => 0]);
+        $this->assertSame(result::STATUS_NOT_APPLICABLE, (new activity_completion_coverage(1))->check($course)->get_status());
+        $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'visible' => 0]);
+        $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'completion' => COMPLETION_TRACKING_MANUAL]);
+        $this->assertSame(result::STATUS_PASSED, (new activity_completion_coverage(100))->check($course)->get_status());
+        $course->enablecompletion = 0;
+        $this->assertSame(result::STATUS_NOT_APPLICABLE, (new activity_completion_coverage(1))->check($course)->get_status());
+    }
+
+    /**
+     * Test invalid injected thresholds fail before evaluation.
+     */
+    public function test_invalid_threshold_is_rejected(): void {
+        $this->expectException(\coding_exception::class);
+        new activity_completion_coverage(0);
+    }
 }
